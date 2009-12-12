@@ -51,6 +51,11 @@ def uninstall():
         setattr(item, func, v)
 
 
+def add_entries(entries):
+    """Add entries to the global mockfs singleton."""
+    singleton().add_entries(entries)
+
+
 def build_nested_dict(entries):
     """Convert a flat dict of paths to a nested dict."""
     if not entries:
@@ -98,6 +103,11 @@ class MockFS(object):
         self._inwalk = False
         self._path = None
         self._walkdir = self._entries
+
+    def add_entries(self, entries):
+        """Add new entries to mockfs."""
+        new_entries = build_nested_dict(entries)
+        merge_dicts(new_entries, self._entries)
 
     def sanitize(self, path):
         """
