@@ -10,6 +10,7 @@ import glob
 __version__ = '0.5.0'
 
 
+# Python functions to replace
 builtins = {
     'os.path.exists': os.path.exists,
     'os.path.islink': os.path.islink,
@@ -18,10 +19,19 @@ builtins = {
     'os.listdir': os.listdir,
 }
 
-mockfs = None
+
+_mockfs = None
+def singleton(entries=None, pathmap=None):
+    """Return a global MockFS singleton."""
+    global _mockfs
+    if not _mockfs:
+        _mockfs = MockFS(entries=entries, pathmap=pathmap)
+    return _mockfs
+
+
 def install(entries=None, pathmap=None):
-    global mockfs
-    mockfs = MockFS(entries=entries, pathmap=pathmap)
+    """Replace builtin modules with mockfs equivalents."""
+    mockfs = singleton(entries=entries, pathmap=pathmap)
     os.path.exists = mockfs.exists
     os.path.islink = mockfs.islink
     os.path.isdir = mockfs.isdir
