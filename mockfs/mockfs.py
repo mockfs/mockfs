@@ -15,6 +15,7 @@ builtins = {
     'os.path.exists': os.path.exists,
     'os.path.islink': os.path.islink,
     'os.path.isdir': os.path.isdir,
+    'os.path.isfile': os.path.isfile,
     'os.walk': os.walk,
     'os.listdir': os.listdir,
 }
@@ -35,6 +36,7 @@ def install(entries=None, pathmap=None):
     os.path.exists = mockfs.exists
     os.path.islink = mockfs.islink
     os.path.isdir = mockfs.isdir
+    os.path.isfile = mockfs.isfile
     os.walk = mockfs.walk
     os.listdir = mockfs.listdir
 
@@ -137,6 +139,9 @@ class MockFS(object):
     def isdir(self, path):
         path = sanitize(path)
         return type(self.direntry(path)) is dict
+
+    def isfile(self, path):
+        return not self.isdir(path)
 
     def listdir(self, path):
         path = sanitize(path)

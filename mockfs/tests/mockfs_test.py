@@ -40,6 +40,7 @@ class MockFSTestCase(unittest.TestCase):
         for path in filesystem:
             self.assertTrue(os.path.isdir(os.path.dirname(path)))
             self.assertTrue(os.path.exists(path))
+            self.assertTrue(os.path.isfile(path))
 
     def test_sanitize(self):
         """Test MockFS.sanitize(paths_with_extra_slashes)"""
@@ -54,6 +55,7 @@ class MockFSTestCase(unittest.TestCase):
         self.assertTrue(os.path.isdir('/just'))
         self.assertTrue(os.path.isdir('/just/another'))
         self.assertTrue(os.path.exists('/just/another/pythonista'))
+        self.assertTrue(os.path.isfile('/just/another/pythonista'))
 
 
 def suite():
