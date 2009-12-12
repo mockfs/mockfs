@@ -2,6 +2,7 @@ import os
 import unittest
 
 import mockfs
+import mockfs.mockfs
 
 
 class MockFSTestCase(unittest.TestCase):
@@ -39,6 +40,13 @@ class MockFSTestCase(unittest.TestCase):
         for path in filesystem:
             self.assertTrue(os.path.isdir(os.path.dirname(path)))
             self.assertTrue(os.path.exists(path))
+
+    def test_sanitize(self):
+        """Test MockFS.sanitize(paths_with_extra_slashes)"""
+        m = mockfs.mockfs.MockFS()
+        self.assertEqual(m.sanitize('///'), '/')
+        self.assertEqual(m.sanitize('///usr//bin///'), '/usr/bin')
+        self.assertEqual(m.sanitize('///usr//bin'), '/usr/bin')
 
 
 def suite():

@@ -117,7 +117,8 @@ class MockFS(object):
         to simulate the file system.
 
         """
-        path = path.replace('//', '/')
+        while '//' in path:
+            path = path.replace('//', '/')
         while len(path) > 1 and path.endswith('/'):
             path = path[:-1]
         return path
