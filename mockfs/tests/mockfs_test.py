@@ -6,9 +6,13 @@ import mockfs
 
 class MockFSTestCase(unittest.TestCase):
     def setUp(self):
-        mockfs.install(entries={})
+        mockfs.install()
+
+    def tearDown(self):
+        mockfs.uninstall()
 
     def test_empty(self):
+        """Test an empty filesystem"""
         self.assertFalse(os.path.exists('/'))
 
 

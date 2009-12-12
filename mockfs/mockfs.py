@@ -51,9 +51,49 @@ def uninstall():
         setattr(item, func, v)
 
 
+def build_nested_dict(entries):
+    """Convert a flat dict of paths to a nested dict."""
+    if not entries:
+        return {}
+
+    result = {}
+    for path, value in entries.iteritems():
+        basename = os.path.basename(path)
+        subpaths = path.split('/')[1:]
+        subentry = result
+        current = subentry
+        for subpath in subpaths:
+            current = subentry
+            subentry = subentry.setdefault(subpath, {})
+        current[basename] = value
+
+    return result
+
+
+def merge_dicts(src, dst):
+    """
+    Return a new dictionary with entries from A merged into B.
+
+    :param src: is the source dictionary
+    :param dst: is the destination dictionary
+
+    """
+    for k, v in src.iteritems():
+        if k not in dst:
+            dst[k] = v
+            continue
+
+        if type(dst[k]) is dict:
+            if type(v) is dict:
+                dst[k] = merge_dicts(dst[k], v)
+            else:
+                dst[k] = v
+            continue
+
+
 class MockFS(object):
     def __init__(self, entries=None, pathmap=None):
-        self._entries = entries
+        self._entries = build_nested_dict(entries)
         self._pathmap = pathmap
         self._inwalk = False
         self._path = None
@@ -75,6 +115,8 @@ class MockFS(object):
     def exists(self, path):
         path = self.sanitize(path)
         dirent = self.direntry(os.path.dirname(path))
+        if path == '/':
+            return bool(dirent)
         return dirent and os.path.basename(path) in dirent
 
     def isdir(self, path):
