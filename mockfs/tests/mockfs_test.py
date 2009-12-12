@@ -48,6 +48,13 @@ class MockFSTestCase(unittest.TestCase):
         self.assertEqual(m.sanitize('///usr//bin///'), '/usr/bin')
         self.assertEqual(m.sanitize('///usr//bin'), '/usr/bin')
 
+    def test_unsanitized_entries(self):
+        mockfs.add_entries({'///just////another////pythonista': ''})
+
+        self.assertTrue(os.path.isdir('/just'))
+        self.assertTrue(os.path.isdir('/just/another'))
+        self.assertTrue(os.path.exists('/just/another/pythonista'))
+
 
 def suite():
     suite = unittest.TestSuite()
