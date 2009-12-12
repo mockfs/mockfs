@@ -28,6 +28,7 @@ class MockFSTestCase(unittest.TestCase):
             '/a/a/a': '',
             '/a/a/b': '',
             '/a/b/a': '',
+            '/a/b/b': '',
             '/b/a/a': '',
             '/b/a/b': '',
             '/b/b/a': '',
