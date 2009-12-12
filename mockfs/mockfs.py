@@ -68,7 +68,7 @@ def build_nested_dict(entries):
         return {}
 
     result = {}
-    for raw_path, value in entries.iteritems():
+    for raw_path, value in entries.items():
         path = sanitize(raw_path)
         basename = os.path.basename(path)
         subpaths = path.split('/')[1:]
@@ -90,7 +90,7 @@ def merge_dicts(src, dst):
     :param dst: is the destination dictionary
 
     """
-    for k, v in src.iteritems():
+    for k, v in src.items():
         if k not in dst:
             dst[k] = v
             continue
