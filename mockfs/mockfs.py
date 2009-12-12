@@ -38,6 +38,7 @@ def install(entries=None, pathmap=None):
     os.walk = mockfs.walk
     os.listdir = mockfs.listdir
 
+
 def uninstall():
     """Restore the original builtin functions."""
     for k, v in builtins.iteritems():
@@ -96,6 +97,22 @@ def merge_dicts(src, dst):
             continue
 
 
+def sanitize(path):
+    """
+    Clean up path arguments for use with MockFS
+
+    MockFS isn't happy with trailing slashes since it uses a dict
+    to simulate the file system.
+
+    """
+    while '//' in path:
+        path = path.replace('//', '/')
+    while len(path) > 1 and path.endswith('/'):
+        path = path[:-1]
+    return path
+
+
+
 class MockFS(object):
     def __init__(self, entries=None, pathmap=None):
         self._entries = build_nested_dict(entries)
@@ -109,33 +126,19 @@ class MockFS(object):
         new_entries = build_nested_dict(entries)
         merge_dicts(new_entries, self._entries)
 
-    def sanitize(self, path):
-        """
-        Clean up path arguments for use with MockFS
-
-        MockFS isn't happy with trailing slashes since it uses a dict
-        to simulate the file system.
-
-        """
-        while '//' in path:
-            path = path.replace('//', '/')
-        while len(path) > 1 and path.endswith('/'):
-            path = path[:-1]
-        return path
-
     def exists(self, path):
-        path = self.sanitize(path)
+        path = sanitize(path)
         dirent = self.direntry(os.path.dirname(path))
         if path == '/':
             return bool(dirent)
         return dirent and os.path.basename(path) in dirent
 
     def isdir(self, path):
-        path = self.sanitize(path)
+        path = sanitize(path)
         return type(self.direntry(path)) is dict
 
     def listdir(self, path):
-        path = self.sanitize(path)
+        path = sanitize(path)
         direntry = self.direntry(path)
         if direntry:
             entries = list(direntry.keys())
@@ -144,11 +147,11 @@ class MockFS(object):
         return []
 
     def islink(self, path):
-        path = self.sanitize(path)
+        path = sanitize(path)
         return False
 
     def walk(self, path):
-        path = self.sanitize(path)
+        path = sanitize(path)
         entries = []
         inspect = [path]
         while True:
@@ -171,7 +174,7 @@ class MockFS(object):
         raise StopIteration
 
     def direntry(self, path):
-        path = self.sanitize(path)
+        path = sanitize(path)
         if path == '/':
             return self._entries
         elts = path.split('/')[1:]
