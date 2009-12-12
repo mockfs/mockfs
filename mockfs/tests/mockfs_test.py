@@ -22,6 +22,23 @@ class MockFSTestCase(unittest.TestCase):
         self.assertTrue(os.path.isdir('/'))
         self.assertTrue(os.path.exists('/foo'))
 
+    def test_nested_directories(self):
+        """Test files in subdirectories."""
+        filesystem = {
+            '/a/a/a': '',
+            '/a/a/b': '',
+            '/a/b/a': '',
+            '/b/a/a': '',
+            '/b/a/b': '',
+            '/b/b/a': '',
+            '/b/b/b': '',
+        }
+        mockfs.add_entries(filesystem)
+
+        for path in filesystem:
+            self.assertTrue(os.path.isdir(os.path.dirname(path)))
+            self.assertTrue(os.path.exists(path))
+
 
 def suite():
     suite = unittest.TestSuite()
