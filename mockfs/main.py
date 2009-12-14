@@ -1,48 +1,12 @@
-"""
-===============================================
-mockfs: A simple mock filesystem for unit tests
-===============================================
+"""mockfs: A simple mock filesystem for unit tests."""
 
-Example::
-
-    >>> import mockfs
-    >>> mockfs.install({'/new/magic': 'formula'})
-
-    >>> import os
-    >>> os.listdir('/new')
-    ['magic']
-
-    >>> os.path.exists('/bin')
-    False
-
-    >>> mockfs.uninstall()
-
-    >>> os.path.exists('/new')
-    False
-
-    >>> os.path.exists('/bin')
-    True
-
-
-"""
 import os
 import glob
 
-__version__ = '0.5.0'
 
-
-# Python functions to replace
-builtins = {
-    'os.path.exists': os.path.exists,
-    'os.path.islink': os.path.islink,
-    'os.path.isdir': os.path.isdir,
-    'os.path.isfile': os.path.isfile,
-    'os.walk': os.walk,
-    'os.listdir': os.listdir,
-}
-
-
+# Static MockFS instance
 _mockfs = None
+
 def singleton(entries=None, pathmap=None):
     """Return a global MockFS singleton."""
     global _mockfs
@@ -51,37 +15,9 @@ def singleton(entries=None, pathmap=None):
     return _mockfs
 
 
-def install(entries=None, pathmap=None):
-    """Replace builtin modules with mockfs equivalents."""
-    mockfs = singleton(entries=entries, pathmap=pathmap)
-    os.path.exists = mockfs.exists
-    os.path.islink = mockfs.islink
-    os.path.isdir = mockfs.isdir
-    os.path.isfile = mockfs.isfile
-    os.walk = mockfs.walk
-    os.listdir = mockfs.listdir
-
-
 def uninstall():
-    """Restore the original builtin functions."""
-    # Remove the original mockfs instance
     global _mockfs
     _mockfs = None
-
-    for k, v in builtins.items():
-        mod, func = k.rsplit('.', 1)
-        item = None
-        for elt in mod.split('.'):
-            if item is None:
-                item = globals()[elt]
-            else:
-                item = getattr(item, elt)
-        setattr(item, func, v)
-
-
-def add_entries(entries):
-    """Add entries to the global mockfs singleton."""
-    singleton().add_entries(entries)
 
 
 def build_nested_dict(entries):
@@ -108,8 +44,8 @@ def merge_dicts(src, dst):
     """
     Return a new dictionary with entries from A merged into B.
 
-    :param src: is the source dictionary
-    :param dst: is the destination dictionary
+    :param src: source dictionary
+    :param dst: destination dictionary
 
     """
     for k, v in src.items():
@@ -142,6 +78,9 @@ def sanitize(path):
 
 
 class MockFS(object):
+    """
+    Provides implementations for functions in ``os``, ``os.path``, and ``glob``."""
+
     def __init__(self, entries=None, pathmap=None):
         self._entries = build_nested_dict(entries)
         self._pathmap = pathmap

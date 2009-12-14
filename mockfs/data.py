@@ -7,10 +7,6 @@ def instance():
     return _data
 
 
-def install():
-    instance()
-
-
 def uninstall():
     global _data
     _data = None
