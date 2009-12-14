@@ -1,50 +1,20 @@
 .. _mockfs-api:
 
-.. testsetup:: *
-
-    import mockfs
-
-.. contents::
-
-===============================
-:mod:`mockfs` -- High Level API
-===============================
-
-.. doctest::
-
-   >>> import mockfs
-   >>> mockfs.install({'/new/entry': ''})
-
-   >>> import os
-   >>> os.path.exists('/new')
-   True
-
-   >>> mockfs.uninstall()
-   >>> os.path.exists('/new')
-   False
-
-
-.. automodule:: mockfs
-   :members:
-   :undoc-members:
-
-=============
-Developer API
-=============
-
-.. automodule:: mockfs.mockfs
+``os.path`` and ``glob`` Implementations
+========================================
+.. automodule:: mockfs.main
    :members:
    :undoc-members:
 
 
-File Storage
-------------
+File Storage and IO
+===================
 .. automodule:: mockfs.storage
    :members:
    :undoc-members:
 
-MockFS Data Layer
------------------
+Internal Data
+=============
 .. automodule:: mockfs.data
    :members:
    :undoc-members:
