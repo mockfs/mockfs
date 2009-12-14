@@ -1,7 +1,28 @@
 """
-mockfs: An in-memory filesystem use with unittest
+===============================================
+mockfs: A simple mock filesystem for unit tests
+===============================================
 
->>> import mockfs
+Example::
+
+    >>> import mockfs
+    >>> mockfs.install({'/new/magic': 'formula'})
+
+    >>> import os
+    >>> os.listdir('/new')
+    ['magic']
+
+    >>> os.path.exists('/bin')
+    False
+
+    >>> mockfs.uninstall()
+
+    >>> os.path.exists('/new')
+    False
+
+    >>> os.path.exists('/bin')
+    True
+
 
 """
 import os
