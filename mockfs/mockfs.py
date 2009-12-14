@@ -43,7 +43,10 @@ def install(entries=None, pathmap=None):
 
 def uninstall():
     """Restore the original builtin functions."""
+    # Remove the original mockfs instance
     global _mockfs
+    _mockfs = None
+
     for k, v in builtins.items():
         mod, func = k.rsplit('.', 1)
         item = None
@@ -53,8 +56,6 @@ def uninstall():
             else:
                 item = getattr(item, elt)
         setattr(item, func, v)
-    # Remove the original mockfs instance
-    _mockfs = None
 
 
 def add_entries(entries):

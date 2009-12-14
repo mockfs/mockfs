@@ -9,7 +9,7 @@ Welcome to mockfs's documentation!
 Contents:
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 3
 
     api
 
