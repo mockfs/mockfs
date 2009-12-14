@@ -43,7 +43,7 @@ class MockFSTestCase(unittest.TestCase):
             self.assertTrue(os.path.isfile(path))
 
     def test_sanitize(self):
-        """Test MockFS.sanitize(paths_with_extra_slashes)"""
+        """Test sanitize() with rogue paths"""
         m = mockfs.main
         self.assertEqual(m.sanitize('///'), '/')
         self.assertEqual(m.sanitize('///usr//bin///'), '/usr/bin')
