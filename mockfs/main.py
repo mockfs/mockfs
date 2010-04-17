@@ -20,14 +20,14 @@ def uninstall():
     _mockfs = None
 
 
-def build_nested_dict(entries):
+def _build_nested_dict(entries):
     """Convert a flat dict of paths to a nested dict."""
     if not entries:
         return {}
 
     result = {}
     for raw_path, value in entries.items():
-        path = sanitize(raw_path)
+        path = _sanitize(raw_path)
         basename = os.path.basename(path)
         subpaths = path.split('/')[1:]
         subentry = result
@@ -40,7 +40,7 @@ def build_nested_dict(entries):
     return result
 
 
-def merge_dicts(src, dst):
+def _merge_dicts(src, dst):
     """
     Return a new dictionary with entries from A merged into B.
 
@@ -55,13 +55,13 @@ def merge_dicts(src, dst):
 
         if type(dst[k]) is dict:
             if type(v) is dict:
-                dst[k] = merge_dicts(dst[k], v)
+                dst[k] = _merge_dicts(dst[k], v)
             else:
                 dst[k] = v
             continue
 
 
-def sanitize(path):
+def _sanitize(path):
     """
     Clean up path arguments for use with MockFS
 
@@ -82,7 +82,7 @@ class MockFS(object):
     Provides implementations for functions in ``os``, ``os.path``, and ``glob``."""
 
     def __init__(self, entries=None, pathmap=None):
-        self._entries = build_nested_dict(entries)
+        self._entries = _build_nested_dict(entries)
         self._pathmap = pathmap
         self._inwalk = False
         self._path = None
@@ -90,26 +90,26 @@ class MockFS(object):
 
     def add_entries(self, entries):
         """Add new entries to mockfs."""
-        new_entries = build_nested_dict(entries)
-        merge_dicts(new_entries, self._entries)
+        new_entries = _build_nested_dict(entries)
+        _merge_dicts(new_entries, self._entries)
 
     def exists(self, path):
-        path = sanitize(path)
-        dirent = self.direntry(os.path.dirname(path))
+        path = _sanitize(path)
+        dirent = self._direntry(os.path.dirname(path))
         if path == '/':
             return bool(dirent)
         return dirent and os.path.basename(path) in dirent
 
     def isdir(self, path):
-        path = sanitize(path)
-        return type(self.direntry(path)) is dict
+        path = _sanitize(path)
+        return type(self._direntry(path)) is dict
 
     def isfile(self, path):
         return not self.isdir(path)
 
     def listdir(self, path):
-        path = sanitize(path)
-        direntry = self.direntry(path)
+        path = _sanitize(path)
+        direntry = self._direntry(path)
         if direntry:
             entries = list(direntry.keys())
             entries.sort()
@@ -117,17 +117,17 @@ class MockFS(object):
         return []
 
     def islink(self, path):
-        path = sanitize(path)
+        path = _sanitize(path)
         return False
 
     def walk(self, path):
-        path = sanitize(path)
+        path = _sanitize(path)
         entries = []
         inspect = [path]
         while True:
             dirstack = []
             for entry in inspect:
-                dirent = self.direntry(entry)
+                dirent = self._direntry(entry)
                 dirs = []
                 files = []
                 if dirent:
@@ -143,8 +143,8 @@ class MockFS(object):
                 break
         raise StopIteration
 
-    def direntry(self, path):
-        path = sanitize(path)
+    def _direntry(self, path):
+        path = _sanitize(path)
         if path == '/':
             return self._entries
         elts = path.split('/')[1:]
