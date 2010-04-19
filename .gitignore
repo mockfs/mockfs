@@ -1,5 +1,6 @@
-/config.mk
+/config.mak
 /Meta
+/build
 *.py[co]
 *.swp
 *~
