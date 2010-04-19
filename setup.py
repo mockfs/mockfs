@@ -10,10 +10,7 @@
 import sys
 import mockfs as _mockfs
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from distutils.core import setup
 
 
 SETUP_ARGS = dict(
