@@ -13,8 +13,8 @@ File Storage and IO
    :members:
    :undoc-members:
 
-Internal Data
-=============
-.. automodule:: mockfs.data
+Utility Functions
+=================
+.. automodule:: mockfs.util
    :members:
    :undoc-members:
