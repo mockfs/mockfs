@@ -8,16 +8,17 @@
 
 
 import sys
-import mockfs as _mockfs
+import mockfs
+import mockfs.mfs
 
 from distutils.core import setup
 
 
 SETUP_ARGS = dict(
     name='mockfs',
-    version=_mockfs.__version__,
+    version=mockfs.__version__,
     description='Mock filesystem implementation for unit tests',
-    long_description = _mockfs.__doc__,
+    long_description=mockfs.mfs.__doc__,
     author='David Aguilar',
     author_email='davvid@gmail.com',
     url='http://github.com/davvid/mockfs',
