@@ -16,28 +16,23 @@ Example Unit Test
 
 .. doctest::
 
-    >>> import os
     >>> import mockfs
+    >>> mfs = mockfs.install()
 
-    >>> mockfs.install()
-    >>> mockfs.add_entries({'/new/magic': ''})
+    >>> import os
+    >>> os.path.exists('/usr')
+    False
 
-    >>> os.path.exists('/new')
+    >>> mfs.add_entries({'/usr/bin/mockfs-magic': ''})
+    >>> os.path.exists('/usr')
     True
 
-    >>> os.listdir('/new')
-    ['magic']
-
-    >>> os.path.exists('/bin')
-    False
+    >>> os.listdir('/usr/bin')
+    ['mockfs-magic']
 
     >>> mockfs.uninstall()
-
-    >>> os.path.exists('/new')
+    >>> os.path.exists('/usr/bin/mockfs-magic')
     False
-
-    >>> os.path.exists('/bin')
-    True
 
 .. autofunction:: mockfs.install
 
@@ -58,4 +53,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

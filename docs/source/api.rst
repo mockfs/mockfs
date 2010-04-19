@@ -2,7 +2,7 @@
 
 ``os.path`` and ``glob`` Implementations
 ========================================
-.. automodule:: mockfs.main
+.. automodule:: mockfs.mfs
    :members:
    :undoc-members:
 
