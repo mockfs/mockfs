@@ -18,7 +18,7 @@ except ImportError:
 
 
 SETUP_ARGS = dict(
-    name='jsonpickle',
+    name='mockfs',
     version=_mockfs.__version__,
     description='Mock filesystem implementation for unit tests',
     long_description = _mockfs.__doc__,
