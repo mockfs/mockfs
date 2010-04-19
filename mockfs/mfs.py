@@ -8,10 +8,9 @@ from mockfs import util
 
 class MockFS(object):
     """
-    The main MockFS implementation
+    MockFS implementation object
 
-    Provides stubs for functions in ``os``, ``os.path``,
-    and ``glob``.
+    Provides stubs for functions in :mod:`os`, :mod:`os.path`, and :mod:`glob`.
 
     """
 
@@ -28,6 +27,12 @@ class MockFS(object):
         util.merge_dicts(new_entries, self._entries)
 
     def exists(self, path):
+        """
+        Return True if path exists
+
+        Implements the :func:`os.path.exists` interface.
+
+        """
         path = util.sanitize(path)
         dirent = self._direntry(os.path.dirname(path))
         if path == '/':
@@ -35,13 +40,44 @@ class MockFS(object):
         return bool(dirent) and os.path.basename(path) in dirent
 
     def isdir(self, path):
+        """
+        Return True if path is a directory
+
+        Implements the :func:`os.path.isdir` interface.
+
+        """
         path = util.sanitize(path)
         return type(self._direntry(path)) is dict
 
     def isfile(self, path):
+        """
+        Return True if path is a file
+
+        Implements the :func:`os.path.isfile` interface.
+
+        """
         return not self.isdir(path)
 
+    def islink(self, path):
+        """
+        Return True if path is a symlink
+
+        .. note::
+
+            Currently hard-wired to return False
+
+        """
+        path = util.sanitize(path)
+        return False
+
     def listdir(self, path):
+        """
+        Return the directory contents of 'path'
+
+        Implements the :func:`os.listdir` interface.
+        :param path: filesystem path
+
+        """
         path = util.sanitize(path)
         direntry = self._direntry(path)
         if direntry:
@@ -50,11 +86,13 @@ class MockFS(object):
             return entries
         return []
 
-    def islink(self, path):
-        path = util.sanitize(path)
-        return False
-
     def walk(self, path):
+        """
+        Walk a filesystem path
+
+        Implements the :func:`os.walk` interface.
+
+        """
         path = util.sanitize(path)
         entries = []
         inspect = [path]
@@ -78,6 +116,7 @@ class MockFS(object):
         raise StopIteration
 
     def _direntry(self, path):
+        """Return the directory "dict" entry for a path"""
         path = util.sanitize(path)
         if path == '/':
             return self._entries
