@@ -20,10 +20,13 @@ def install(entries=None, pathmap=None):
     Replace builtin modules with mockfs equivalents.
 
     :param entries: Dictionary mapping paths to content
+    :rtype MockFS: Newly installed :class:`mockfs.mfs.MockFS` handler
 
     Example::
 
-        install(entries={'/bin/ls': 'content'})
+        import mockfs
+
+        mfs = mockfs.install(entries={'/bin/ls': 'content'})
 
     """
     mfs = MockFS(entries=entries, pathmap=pathmap)

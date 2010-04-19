@@ -8,31 +8,37 @@
 ========================================================
 
 `mockfs` makes it possible to test filesystem-dependent code by
-replacing functions from the ``os`` and ``glob`` modules.
-
+replacing functions from the :mod:`os` and :mod:`glob` modules.
 
 Example Unit Test
 =================
 
-.. doctest::
+.. code-block:: python
 
-    >>> import mockfs
-    >>> mfs = mockfs.install()
+    import os
+    import unittest
 
-    >>> import os
-    >>> os.path.exists('/usr')
-    False
+    import mockfs
 
-    >>> mfs.add_entries({'/usr/bin/mockfs-magic': ''})
-    >>> os.path.exists('/usr')
-    True
+    class ExampleTestCase(unittest.TestCase):
+        def setUp(self):
+            self.mfs = mockfs.install()
 
-    >>> os.listdir('/usr/bin')
-    ['mockfs-magic']
+        def tearDown(self):
+            mockfs.uninstall()
 
-    >>> mockfs.uninstall()
-    >>> os.path.exists('/usr/bin/mockfs-magic')
-    False
+        def test_using_os_path(self):
+            self.mfs.add_entries({'/usr/bin/mockfs-magic': ''})
+            self.assertEqual(os.listdir('/usr/bin'), ['mockfs-magic'])
+
+Current supported functions:
+
+* :func:`os.path.exists`
+* :func:`os.path.isdir`
+* :func:`os.path.isfile`
+* :func:`os.path.islink`
+* :func:`os.listdir`
+* :func:`os.walk`
 
 .. autofunction:: mockfs.install
 

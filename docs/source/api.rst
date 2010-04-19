@@ -6,6 +6,11 @@
    :members:
    :undoc-members:
 
+Utility Functions
+=================
+.. automodule:: mockfs.util
+   :members:
+   :undoc-members:
 
 File Storage and IO
 ===================
@@ -13,8 +18,3 @@ File Storage and IO
    :members:
    :undoc-members:
 
-Utility Functions
-=================
-.. automodule:: mockfs.util
-   :members:
-   :undoc-members:
