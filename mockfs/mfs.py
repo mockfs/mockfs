@@ -1,7 +1,7 @@
 """mockfs: A simple mock filesystem for unit tests."""
 
 import os
-import glob
+import copy
 import errno
 
 from mockfs import util
@@ -169,6 +169,21 @@ class MockFS(object):
             _raise_OSError(errno.ENOTEMPTY, path)
 
         del entry[basename]
+
+    def copytree(self, src, dst):
+        """Copy a directory subtree
+
+        Implements the :func:`shutil.copytree` interface.
+
+        """
+        src = util.sanitize(src)
+        dst = util.sanitize(dst)
+        src_d = self._direntry(src)
+        if src_d is None:
+            _raise_OSError(errno.ENOENT, src)
+        dst_d_parent = self._direntry(os.path.dirname(dst))
+        dst_d_parent[os.path.basename(dst)] = copy.deepcopy(src_d)
+
     ## Internal Methods
 
     def _direntry(self, path):
