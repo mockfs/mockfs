@@ -91,6 +91,20 @@ class MockFSTestCase(unittest.TestCase):
         self.mfs.add_entries(filesystem)
         self.assertRaises(OSError, os.remove, '/a/does-not-exist')
 
+    def test_os_rmdir(self):
+        filesystem = {
+            '/a/a': '',
+            '/a/b': '',
+            '/a/c': '',
+        }
+        self.mfs.add_entries(filesystem)
+        self.assertRaises(OSError, os.rmdir, '/a')
+
+        os.remove('/a/a')
+        os.remove('/a/c')
+        os.remove('/a/b')
+        os.rmdir('/a')
+        self.assertFalse(os.path.isdir('/a'))
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(MockFSTestCase))

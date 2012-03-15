@@ -13,6 +13,7 @@ builtins = {
     'os.walk': os.walk,
     'os.listdir': os.listdir,
     'os.remove': os.remove,
+    'os.rmdir': os.rmdir,
 }
 
 
@@ -38,6 +39,7 @@ def install(entries=None, pathmap=None):
     os.walk = mfs.walk
     os.listdir = mfs.listdir
     os.remove = mfs.remove
+    os.rmdir = mfs.rmdir
 
     return mfs
 

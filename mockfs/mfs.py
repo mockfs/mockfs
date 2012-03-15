@@ -139,6 +139,31 @@ class MockFS(object):
             del entry[basename]
         except KeyError:
             _raise_OSError(errno.ENOENT, path)
+
+    def rmdir(self, path):
+        """Remove the entry for a directory path
+
+        Implements the :func:`os.rmdir` interface.
+
+        """
+        path = util.sanitize(path)
+        dirname = os.path.dirname(path)
+        basename = os.path.basename(path)
+        entry = self._direntry(dirname)
+        if type(entry) is not dict:
+            _raise_OSError(errno.ENOENT, path)
+
+        try:
+            direntry = entry[basename]
+        except KeyError:
+            _raise_OSError(errno.ENOENT, path)
+
+        if len(direntry) != 0:
+            _raise_OSError(errno.ENOTEMPTY, path)
+
+        del entry[basename]
+    ## Internal Methods
+
     def _direntry(self, path):
         """Return the directory "dict" entry for a path"""
         path = util.sanitize(path)
