@@ -60,6 +60,36 @@ class MockFSTestCase(unittest.TestCase):
         self.assertTrue(os.path.exists('///just////another////////pythonista'))
         self.assertTrue(os.path.isfile('///just////another////////pythonista'))
 
+    def test_os_remove(self):
+        filesystem = {
+            '/a/a': '',
+            '/a/b': '',
+            '/a/c': '',
+        }
+        self.mfs.add_entries(filesystem)
+        self.assertTrue(os.path.isfile('/a/a'))
+        self.assertTrue(os.path.isfile('/a/b'))
+        self.assertTrue(os.path.isfile('/a/c'))
+
+        os.remove('/a/a')
+        self.assertFalse(os.path.isfile('/a/a'))
+
+        os.remove('/a/c')
+        self.assertFalse(os.path.isfile('/a/c'))
+
+        os.remove('/a/b')
+        self.assertFalse(os.path.isfile('/a/b'))
+
+        self.assertEqual(os.listdir('/a'), [])
+
+    def test_os_remove_does_not_exist(self):
+        filesystem = {
+            '/a/a': '',
+            '/a/b': '',
+            '/a/c': '',
+        }
+        self.mfs.add_entries(filesystem)
+        self.assertRaises(OSError, os.remove, '/a/does-not-exist')
 
 def suite():
     suite = unittest.TestSuite()

@@ -62,7 +62,8 @@ class MockFS(object):
         Implements the :func:`os.path.isfile` interface.
 
         """
-        return not self.isdir(path)
+        path = util.sanitize(path)
+        return isinstance(self._direntry(path), basestring)
 
     def islink(self, path):
         """
@@ -121,6 +122,23 @@ class MockFS(object):
                 break
         raise StopIteration
 
+    def remove(self, path):
+        """Remove the entry for a file path
+
+        Implements the :func:`os.remove` interface.
+
+        """
+        path = util.sanitize(path)
+        dirname = os.path.dirname(path)
+        basename = os.path.basename(path)
+        entry = self._direntry(dirname)
+        if type(entry) is not dict:
+            _raise_OSError(errno.ENOENT, path)
+
+        try:
+            del entry[basename]
+        except KeyError:
+            _raise_OSError(errno.ENOENT, path)
     def _direntry(self, path):
         """Return the directory "dict" entry for a path"""
         path = util.sanitize(path)
