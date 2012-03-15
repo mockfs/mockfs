@@ -105,6 +105,15 @@ class MockFSTestCase(unittest.TestCase):
         os.remove('/a/b')
         os.rmdir('/a')
         self.assertFalse(os.path.isdir('/a'))
+
+    def test_os_makedirs(self):
+        os.makedirs('/foo/bar/baz')
+        self.assertTrue(os.path.isdir('/'))
+        self.assertTrue(os.path.isdir('/foo'))
+        self.assertTrue(os.path.isdir('/foo/bar'))
+        self.assertTrue(os.path.isdir('/foo/bar/baz'))
+
+
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(MockFSTestCase))

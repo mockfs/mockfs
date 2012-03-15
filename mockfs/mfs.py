@@ -77,6 +77,13 @@ class MockFS(object):
         path = util.sanitize(path)
         return False
 
+    def makedirs(self, path):
+        """Create directory entries for a path"""
+        path = util.sanitize(path)
+        new_entries = util.build_nested_dir_dict([path])
+        util.merge_dicts(new_entries, self._entries)
+
+
     def listdir(self, path):
         """
         Return the directory contents of 'path'

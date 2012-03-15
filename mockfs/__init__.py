@@ -12,6 +12,7 @@ builtins = {
     'os.path.isfile': os.path.isfile,
     'os.walk': os.walk,
     'os.listdir': os.listdir,
+    'os.makedirs': os.makedirs,
     'os.remove': os.remove,
     'os.rmdir': os.rmdir,
 }
@@ -38,6 +39,7 @@ def install(entries=None, pathmap=None):
     os.path.isfile = mfs.isfile
     os.walk = mfs.walk
     os.listdir = mfs.listdir
+    os.makedirs = mfs.makedirs
     os.remove = mfs.remove
     os.rmdir = mfs.rmdir
 
