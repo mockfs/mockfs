@@ -1,5 +1,4 @@
 import os
-import copy
 
 
 def sanitize(path):
@@ -54,4 +53,21 @@ def build_nested_dict(entries):
             current = subentry
             subentry = subentry.setdefault(subpath, {})
         current[basename] = value
+    return result
+
+
+def build_nested_dir_dict(entries):
+    result = {}
+    if not entries:
+        return {}
+    for raw_path in entries:
+        path = sanitize(raw_path)
+        basename = os.path.basename(path)
+        subpaths = path.split('/')[1:]
+        subentry = result
+        current = subentry
+        for subpath in subpaths:
+            current = subentry
+            subentry = subentry.setdefault(subpath, {})
+        current[basename] = {}
     return result
