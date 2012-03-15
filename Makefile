@@ -1,6 +1,8 @@
 prefix ?= $(HOME)
-docdir ?= $(DESTDIR)$(prefix)/share/doc/mockfs/html
+docdir ?= $(prefix)/share/doc/mockfs/html
 webdir ?= $(docdir)
+
+NOSE ?= nosetests
 PYTHON ?= python
 RSYNC ?= rsync -r --stats --delete --exclude=.gitignore --exclude=.git
 RM ?= rm
@@ -19,13 +21,15 @@ docs: all
 	@$(MAKE) -C docs html
 
 install-doc: docs
-	@$(RSYNC) docs/build/html/ $(docdir)/
+	@mkdir -p $(DESTDIR)$(docdir)
+	@$(RSYNC) docs/build/html/ $(DESTDIR)$(docdir)/
 
 website-docs: docs
-	@$(RSYNC) docs/build/html/ $(webdir)/
+	@mkdir -p $(DESTDIR)$(webdir)
+	@$(RSYNC) docs/build/html/ $(DESTDIR)$(webdir)/
 
 test: all
-	@make -C docs doctest
-	@nosetests --with-doctest
+	@$(MAKE) -C docs doctest
+	@$(NOSE) --with-doctest
 
 .PHONY: all docs install install-docs website-docs test
