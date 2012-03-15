@@ -2,8 +2,14 @@
 
 import os
 import glob
+import errno
 
 from mockfs import util
+
+
+def _raise_OSError(err, path):
+    """Raise an OSError with an appropriate error string"""
+    raise OSError(err, os.strerror(err) + ": '%s'" % path)
 
 
 class MockFS(object):
@@ -80,11 +86,12 @@ class MockFS(object):
         """
         path = util.sanitize(path)
         direntry = self._direntry(path)
-        if direntry:
+        if direntry is None:
+            _raise_OSError(errno.ENOENT, path)
+        else:
             entries = list(direntry.keys())
             entries.sort()
             return entries
-        return []
 
     def walk(self, path):
         """
@@ -94,7 +101,6 @@ class MockFS(object):
 
         """
         path = util.sanitize(path)
-        entries = []
         inspect = [path]
         while True:
             dirstack = []
