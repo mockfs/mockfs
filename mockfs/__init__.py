@@ -3,7 +3,7 @@ import glob
 
 from mockfs.mfs import MockFS
 
-__version__ = '0.6.0'
+__version__ = '0.8.0'
 
 # Python functions to replace
 builtins = {
