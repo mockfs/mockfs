@@ -20,12 +20,9 @@ class MockFS(object):
 
     """
 
-    def __init__(self, entries=None, pathmap=None):
-        self._entries = util.build_nested_dict(entries)
-        self._pathmap = pathmap
-        self._inwalk = False
-        self._path = None
-        self._walkdir = self._entries
+    def __init__(self, entries=None):
+        self._entries = {}
+        self.add_entries(entries)
 
     def add_entries(self, entries):
         """Add new entries to mockfs."""
@@ -124,8 +121,7 @@ class MockFS(object):
                 dirstack.extend([os.path.join(entry, d) for d in dirs])
             inspect = dirstack
             if not inspect:
-                break
-        raise StopIteration
+                raise StopIteration
 
     def remove(self, path):
         """Remove the entry for a file path

@@ -18,7 +18,7 @@ builtins = {
 }
 
 
-def install(entries=None, pathmap=None):
+def install(entries=None):
     """
     Replace builtin modules with mockfs equivalents.
 
@@ -32,7 +32,7 @@ def install(entries=None, pathmap=None):
         mfs = mockfs.install(entries={'/bin/ls': 'content'})
 
     """
-    mfs = MockFS(entries=entries, pathmap=pathmap)
+    mfs = MockFS(entries=entries)
     os.path.exists = mfs.exists
     os.path.islink = mfs.islink
     os.path.isdir = mfs.isdir
