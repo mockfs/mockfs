@@ -1,8 +1,8 @@
-import os
 import unittest
-
+# subjects under test
+import glob
+import os
 import mockfs
-import mockfs.mfs as mfs
 
 
 class MockFSTestCase(unittest.TestCase):
@@ -112,6 +112,36 @@ class MockFSTestCase(unittest.TestCase):
         self.assertTrue(os.path.isdir('/foo'))
         self.assertTrue(os.path.isdir('/foo/bar'))
         self.assertTrue(os.path.isdir('/foo/bar/baz'))
+
+    def _mkfs(self):
+        filesystem = {
+            '/a/a/a': {}, '/a/a/b': '',
+            '/a/b/a': {}, '/a/b/b': '',
+            '/b/a/a': {}, '/b/a/b': '',
+            '/b/b/a': {}, '/b/b/b': '',
+        }
+        self.mfs.add_entries(filesystem)
+
+    def test_glob_head(self):
+        self._mkfs()
+        values = glob.glob('/*/a/a')
+        self.assertEqual(values, ['/a/a/a', '/b/a/a'])
+
+    def test_glob_mid(self):
+        self._mkfs()
+        values = glob.glob('/a/*/a')
+        self.assertEqual(values, ['/a/a/a', '/a/b/a'])
+
+    def test_glob_tail(self):
+        """Test files in subdirectories."""
+        self._mkfs()
+        values = glob.glob('/a/a/*')
+        self.assertEqual(values, ['/a/a/a', '/a/a/b'])
+
+    def test_glob_multi(self):
+        self._mkfs()
+        values = glob.glob('/*/a/*')
+        self.assertEquals(values, ['/a/a/a', '/a/a/b', '/b/a/a', '/b/a/b'])
 
 
 def suite():

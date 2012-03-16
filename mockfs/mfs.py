@@ -3,6 +3,7 @@
 import os
 import copy
 import errno
+import fnmatch
 
 from mockfs import util
 
@@ -177,8 +178,45 @@ class MockFS(object):
         dst_d_parent = self._direntry(os.path.dirname(dst))
         dst_d_parent[os.path.basename(dst)] = copy.deepcopy(src_d)
 
-    ## Internal Methods
+    def glob(self, pattern):
+        """Implementation of :py:func:`glob.glob`"""
+        pattern = util.sanitize(pattern)
+        if pattern == '/':
+            return self._entries
 
+        # Keep track of current likely candidate paths.
+        # Each time we filter down, take the new candidates
+        # and append their names to create new candidates paths.
+        patterns = pattern.split('/')[1:]
+        entries = [('', self._entries)]
+        match = fnmatch.fnmatch
+        path_stack = []
+        pattern_stack = ['']
+        paths = []
+
+        for idx, subpattern in enumerate(patterns):
+            pattern_stack.append(subpattern)
+            pattern = '/'.join(pattern_stack)
+
+            new_entries = []
+            new_paths = []
+
+            for subdir, entry in entries:
+                path_stack.append(subdir)
+                for path in sorted(entry):
+                    path_stack.append(path)
+                    abspath = '/'.join(path_stack)
+                    if match(abspath, pattern):
+                        new_entries.append((abspath, entry[path]))
+                        new_paths.append(abspath)
+                    path_stack.pop()
+                path_stack.pop()
+
+            entries = new_entries
+            paths = new_paths
+        return paths
+
+    ## Internal Methods
     def _direntry(self, path):
         """Return the directory "dict" entry for a path"""
         path = util.sanitize(path)

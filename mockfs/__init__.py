@@ -1,4 +1,5 @@
 import os
+import glob
 
 from mockfs.mfs import MockFS
 
@@ -15,6 +16,7 @@ builtins = {
     'os.makedirs': os.makedirs,
     'os.remove': os.remove,
     'os.rmdir': os.rmdir,
+    'glob.glob': glob.glob,
 }
 
 
@@ -42,6 +44,7 @@ def install(entries=None):
     os.makedirs = mfs.makedirs
     os.remove = mfs.remove
     os.rmdir = mfs.rmdir
+    glob.glob = mfs.glob
 
     return mfs
 
