@@ -1,5 +1,7 @@
-prefix ?= $(HOME)
-docdir ?= $(prefix)/share/doc/mockfs/html
+version ?= $(shell grep __version__ mockfs/__init__.py | \
+		awk '{print $$3}' | sed -e "s,',,g")
+prefix ?= $(CURDIR)/mockfs-$(version)
+docdir ?= $(DESTDIR)$(prefix)/share/doc/mockfs/html
 webdir ?= $(docdir)
 
 NOSE ?= nosetests
@@ -11,6 +13,7 @@ RM ?= rm
 -include config.mak
 
 all: mockfs/*.py setup.py
+	@echo mockfs v$(version)
 	$(PYTHON) setup.py build
 
 install: all
