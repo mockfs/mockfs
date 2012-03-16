@@ -7,9 +7,9 @@ import errno
 from mockfs import util
 
 
-def _raise_OSError(err, path):
-    """Raise an OSError with an appropriate error string"""
-    raise OSError(err, os.strerror(err) + ": '%s'" % path)
+def _OSError(err, path):
+    """Return an OSError with an appropriate error string"""
+    return OSError(err, os.strerror(err) + ": '%s'" % path)
 
 
 class MockFS(object):
@@ -52,8 +52,7 @@ class MockFS(object):
         Implements the :func:`os.path.isdir` interface.
 
         """
-        path = util.sanitize(path)
-        return type(self._direntry(path)) is dict
+        return util.is_dir(self._direntry(path))
 
     def isfile(self, path):
         """
@@ -62,8 +61,7 @@ class MockFS(object):
         Implements the :func:`os.path.isfile` interface.
 
         """
-        path = util.sanitize(path)
-        return isinstance(self._direntry(path), basestring)
+        return util.is_file(self._direntry(path))
 
     def islink(self, path):
         """
@@ -74,15 +72,13 @@ class MockFS(object):
             Currently hard-wired to return False
 
         """
-        path = util.sanitize(path)
         return False
 
     def makedirs(self, path):
         """Create directory entries for a path"""
         path = util.sanitize(path)
-        new_entries = util.build_nested_dir_dict([path])
+        new_entries = util.build_nested_dir_dict(path)
         util.merge_dicts(new_entries, self._entries)
-
 
     def listdir(self, path):
         """
@@ -92,14 +88,16 @@ class MockFS(object):
         :param path: filesystem path
 
         """
-        path = util.sanitize(path)
         direntry = self._direntry(path)
         if direntry is None:
-            _raise_OSError(errno.ENOENT, path)
-        else:
+            raise _OSError(errno.ENOENT, path)
+        if util.is_file(direntry):
+            raise _OSError(errno.ENOTDIR, path)
+        if util.is_dir(direntry):
             entries = list(direntry.keys())
             entries.sort()
             return entries
+        raise _OSError(errno.EINVAL, path)
 
     def walk(self, path):
         """
@@ -140,12 +138,12 @@ class MockFS(object):
         basename = os.path.basename(path)
         entry = self._direntry(dirname)
         if type(entry) is not dict:
-            _raise_OSError(errno.ENOENT, path)
+            raise _OSError(errno.ENOENT, path)
 
         try:
             del entry[basename]
         except KeyError:
-            _raise_OSError(errno.ENOENT, path)
+            raise _OSError(errno.ENOENT, path)
 
     def rmdir(self, path):
         """Remove the entry for a directory path
@@ -157,16 +155,16 @@ class MockFS(object):
         dirname = os.path.dirname(path)
         basename = os.path.basename(path)
         entry = self._direntry(dirname)
-        if type(entry) is not dict:
-            _raise_OSError(errno.ENOENT, path)
+        if not util.is_dir(entry):
+            raise _OSError(errno.ENOENT, path)
 
         try:
             direntry = entry[basename]
         except KeyError:
-            _raise_OSError(errno.ENOENT, path)
+            raise _OSError(errno.ENOENT, path)
 
         if len(direntry) != 0:
-            _raise_OSError(errno.ENOTEMPTY, path)
+            raise _OSError(errno.ENOTEMPTY, path)
 
         del entry[basename]
 
@@ -176,11 +174,10 @@ class MockFS(object):
         Implements the :func:`shutil.copytree` interface.
 
         """
-        src = util.sanitize(src)
-        dst = util.sanitize(dst)
         src_d = self._direntry(src)
         if src_d is None:
-            _raise_OSError(errno.ENOENT, src)
+            raise _OSError(errno.ENOENT, src)
+        dst = util.sanitize(dst)
         dst_d_parent = self._direntry(os.path.dirname(dst))
         dst_d_parent[os.path.basename(dst)] = copy.deepcopy(src_d)
 

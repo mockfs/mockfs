@@ -1,5 +1,12 @@
 import os
 
+def is_file(entry):
+    return isinstance(entry, basestring)
+
+
+def is_dir(entry):
+    return type(entry) is dict
+
 
 def sanitize(path):
     """
@@ -39,10 +46,21 @@ def merge_dicts(src, dst):
 
 
 def build_nested_dict(entries):
-    """Convert a flat dict of paths to a nested dict."""
+    """
+    Convert a flat dict of paths to a nested dict
+
+    :param entries: Path to entry dictionary
+    :type entries: :py:data:`dict`
+
+    e.g. `{'/unix/path': 'content', '/unix/dir': {},}`
+
+    """
     result = {}
     if not entries:
         return {}
+    # Each entry key is either a file path or an empty directory.
+    # Directories are represented by dictionaries, the empty dictionary
+    # can be passed as a value to indicate an empty directory.
     for raw_path, value in entries.items():
         path = sanitize(raw_path)
         basename = os.path.basename(path)
@@ -56,18 +74,23 @@ def build_nested_dict(entries):
     return result
 
 
-def build_nested_dir_dict(entries):
+def build_nested_dir_dict(dirpath):
+    """Build a nested dict of dicts from a directory path
+
+    :param dirpath: Directory path
+    :type dirpath: :py:data:`str`
+
+    """
     result = {}
-    if not entries:
-        return {}
-    for raw_path in entries:
-        path = sanitize(raw_path)
-        basename = os.path.basename(path)
-        subpaths = path.split('/')[1:]
-        subentry = result
+    path = sanitize(dirpath)
+    basename = os.path.basename(path)
+    subpaths = path.split('/')[1:]
+
+    subentry = result
+    current = subentry
+    for subpath in subpaths:
         current = subentry
-        for subpath in subpaths:
-            current = subentry
-            subentry = subentry.setdefault(subpath, {})
-        current[basename] = {}
+        subentry = subentry.setdefault(subpath, {})
+
+    current[basename] = {}
     return result

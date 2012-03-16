@@ -16,8 +16,10 @@ class MockFSUtilTestCase(unittest.TestCase):
         self.assertEqual(nested['a'], {'b': {'c': 'c'}})
 
     def test_build_nested_dir_dict(self):
-        nested = util.build_nested_dir_dict(['/foo', '/bar/baz'])
+        nested = util.build_nested_dir_dict('/foo')
         self.assertEqual(nested['foo'], {})
+
+        nested = util.build_nested_dir_dict('/bar/baz')
         self.assertEqual(nested['bar']['baz'], {})
 
     def test_merge_extends_lists(self):
