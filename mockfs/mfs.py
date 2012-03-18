@@ -7,6 +7,23 @@ import fnmatch
 
 from mockfs import util
 
+# Python functions to replace
+builtins = {
+        'os.chdir': os.chdir,
+        'os.getcwd': os.getcwd,
+        'os.path.exists': os.path.exists,
+        'os.path.islink': os.path.islink,
+        'os.path.isdir': os.path.isdir,
+        'os.path.isfile': os.path.isfile,
+        'os.path.abspath': os.path.abspath,
+        'os.walk': os.walk,
+        'os.listdir': os.listdir,
+        'os.makedirs': os.makedirs,
+        'os.remove': os.remove,
+        'os.rmdir': os.rmdir,
+        'glob.glob': glob.glob,
+}
+
 
 def _OSError(err, path):
     """Return an OSError with an appropriate error string"""

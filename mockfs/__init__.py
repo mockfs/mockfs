@@ -2,30 +2,17 @@ import os
 import glob
 
 from mockfs.mfs import MockFS
+from mockfs.mfs import builtins
 
 __version__ = '0.8.0'
-
-# Python functions to replace
-builtins = {
-    'os.path.exists': os.path.exists,
-    'os.path.islink': os.path.islink,
-    'os.path.isdir': os.path.isdir,
-    'os.path.isfile': os.path.isfile,
-    'os.walk': os.walk,
-    'os.listdir': os.listdir,
-    'os.makedirs': os.makedirs,
-    'os.remove': os.remove,
-    'os.rmdir': os.rmdir,
-    'glob.glob': glob.glob,
-}
 
 
 def install(entries=None):
     """
-    Replace builtin modules with mockfs equivalents.
+    Replace builtin functions with mockfs.
 
     :param entries: Dictionary mapping paths to content
-    :rtype MockFS: Newly installed :class:`mockfs.mfs.MockFS` handler
+    :rtype MockFS: Newly installed :class:`mockfs.MockFS` handler
 
     Example::
 
