@@ -26,6 +26,9 @@ builtins = {
         'glob.glob': glob.glob,
 }
 
+# We use the original abspath()
+_abspath_builtin = builtins['os.path.abspath']
+
 
 def _OSError(err, path):
     """Return an OSError with an appropriate error string"""
@@ -97,6 +100,13 @@ class MockFS(object):
         new_entries = util.build_nested_dir_dict(path)
         util.merge_dicts(new_entries, self._entries)
 
+    def abspath(self, path):
+        if os.path.isabs(path):
+            # Folds '////' into '/'
+            return _abspath_builtin(path)
+        curdir = self.cwd.getcwd()
+        return _abspath_builtin(os.path.join(curdir, path))
+
     def listdir(self, path):
         """
         Return the directory contents of 'path'
@@ -143,31 +153,36 @@ class MockFS(object):
             if not inspect:
                 raise StopIteration
 
-    def remove(self, path):
+    def remove(self, fspath):
         """Remove the entry for a file path
 
         Implements the :func:`os.remove` interface.
 
         """
-        path = util.sanitize(path)
+        path = self.abspath(fspath)
         dirname = os.path.dirname(path)
         basename = os.path.basename(path)
         entry = self._direntry(dirname)
-        if type(entry) is not dict:
-            raise _OSError(errno.ENOENT, path)
+        if not util.is_dir(entry):
+            raise _OSError(errno.EPERM, path)
 
         try:
-            del entry[basename]
+            fsentry = entry[basename]
         except KeyError:
             raise _OSError(errno.ENOENT, path)
 
-    def rmdir(self, path):
+        if not util.is_file(fsentry):
+            raise _OSError(errno.EPERM, path)
+
+        del entry[basename]
+
+    def rmdir(self, fspath):
         """Remove the entry for a directory path
 
         Implements the :func:`os.rmdir` interface.
 
         """
-        path = util.sanitize(path)
+        path = self.abspath(fspath)
         dirname = os.path.dirname(path)
         basename = os.path.basename(path)
         entry = self._direntry(dirname)
@@ -177,10 +192,13 @@ class MockFS(object):
         try:
             direntry = entry[basename]
         except KeyError:
-            raise _OSError(errno.ENOENT, path)
+            raise _OSError(errno.ENOENT, fspath)
+
+        if not util.is_dir(direntry):
+            raise _OSError(errno.ENOTDIR, fspath)
 
         if len(direntry) != 0:
-            raise _OSError(errno.ENOTEMPTY, path)
+            raise _OSError(errno.ENOTEMPTY, fspath)
 
         del entry[basename]
 

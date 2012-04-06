@@ -12,6 +12,15 @@ class MockFSTestCase(unittest.TestCase):
     def tearDown(self):
         mockfs.uninstall()
 
+    def _mkfs(self):
+        filesystem = {
+            '/a/a/a': {}, '/a/a/b': '',
+            '/a/b/a': {}, '/a/b/b': '',
+            '/b/a/a': {}, '/b/a/b': '',
+            '/b/b/a': {}, '/b/b/b': '',
+        }
+        self.mfs.add_entries(filesystem)
+
     def test_empty(self):
         """Test an empty filesystem"""
         self.assertFalse(os.path.exists('/'))
@@ -91,6 +100,21 @@ class MockFSTestCase(unittest.TestCase):
         self.mfs.add_entries(filesystem)
         self.assertRaises(OSError, os.remove, '/a/does-not-exist')
 
+    def test_os_remove_dir(self):
+        self._mkfs()
+        self.assertRaises(OSError, os.remove, '/a')
+
+    def test_remove_from_subdir(self):
+        self._mkfs()
+        os.chdir('/a/a')
+        os.remove('b')
+
+        entries = os.listdir('/a/a')
+        self.assertEqual(entries, ['a'])
+
+        entries = os.listdir('.')
+        self.assertEqual(entries, ['a'])
+
     def test_os_rmdir(self):
         filesystem = {
             '/a/a': '',
@@ -106,21 +130,24 @@ class MockFSTestCase(unittest.TestCase):
         os.rmdir('/a')
         self.assertFalse(os.path.isdir('/a'))
 
+    def test_os_rmdir_file(self):
+        self._mkfs()
+        self.assertRaises(OSError, os.rmdir, '/a/a/b')
+
+    def test_os_rmdir_nonempty(self):
+        self._mkfs()
+        os.remove('/a/a/b')
+        self.assertRaises(OSError, os.rmdir, '/a/a')
+
+        os.rmdir('/a/b/a')
+        self.assertRaises(OSError, os.rmdir, '/a/b')
+
     def test_os_makedirs(self):
         os.makedirs('/foo/bar/baz')
         self.assertTrue(os.path.isdir('/'))
         self.assertTrue(os.path.isdir('/foo'))
         self.assertTrue(os.path.isdir('/foo/bar'))
         self.assertTrue(os.path.isdir('/foo/bar/baz'))
-
-    def _mkfs(self):
-        filesystem = {
-            '/a/a/a': {}, '/a/a/b': '',
-            '/a/b/a': {}, '/a/b/b': '',
-            '/b/a/a': {}, '/b/a/b': '',
-            '/b/b/a': {}, '/b/b/b': '',
-        }
-        self.mfs.add_entries(filesystem)
 
     def test_glob_head(self):
         self._mkfs()
