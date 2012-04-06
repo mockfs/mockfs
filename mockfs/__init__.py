@@ -34,6 +34,8 @@ def install(entries=None):
         mfs.add_entries(entries)
 
     # Install functions
+    os.getcwd = mfs.cwd.getcwd
+    os.getcwdu = mfs.cwd.getcwdu
     os.path.exists = mfs.exists
     os.path.islink = mfs.islink
     os.path.isdir = mfs.isdir

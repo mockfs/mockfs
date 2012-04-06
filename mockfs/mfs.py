@@ -12,6 +12,7 @@ from mockfs import util
 builtins = {
         'os.chdir': os.chdir,
         'os.getcwd': os.getcwd,
+        'os.getcwdu': os.getcwdu,
         'os.path.exists': os.path.exists,
         'os.path.islink': os.path.islink,
         'os.path.isdir': os.path.isdir,
@@ -250,3 +251,14 @@ class MockFS(object):
             else:
                 return None
         return retval
+
+
+class Cwd(object):
+    def __init__(self, mfs):
+        self._cwd = '/'
+        self._mfs = mfs
+    def getcwd(self):
+        return self._cwd
+
+    def getcwdu(self):
+        return self._cwd
