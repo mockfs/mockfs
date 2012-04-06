@@ -38,9 +38,9 @@ class MockFS(object):
 
     """
 
-    def __init__(self, entries=None):
+    def __init__(self):
+        self.cwd = Cwd(self)
         self._entries = {}
-        self.add_entries(entries)
 
     def add_entries(self, entries):
         """Add new entries to mockfs."""

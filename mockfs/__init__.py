@@ -16,12 +16,24 @@ def install(entries=None):
 
     Example::
 
+        import os
         import mockfs
 
-        mfs = mockfs.install(entries={'/bin/ls': 'content'})
+        fs = mockfs.install()
+        fs.add_entries({
+                '/bin/sh': 'contents',
+                '/bin/ls': 'contents',
+        ])
+        assert(os.listdir('/bin') == ['ls', 'sh'])
+
+        mockfs.uninstall()
 
     """
-    mfs = MockFS(entries=entries)
+    mfs = MockFS()
+    if entries is not None:
+        mfs.add_entries(entries)
+
+    # Install functions
     os.path.exists = mfs.exists
     os.path.islink = mfs.islink
     os.path.isdir = mfs.isdir
