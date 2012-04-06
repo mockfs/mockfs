@@ -59,7 +59,7 @@ class MockFS(object):
         Implements the :func:`os.path.exists` interface.
 
         """
-        path = util.sanitize(path)
+        path = self.abspath(path)
         dirent = self._direntry(os.path.dirname(path))
         if path == '/':
             return bool(dirent)
@@ -96,7 +96,7 @@ class MockFS(object):
 
     def makedirs(self, path):
         """Create directory entries for a path"""
-        path = util.sanitize(path)
+        path = self.abspath(path)
         new_entries = util.build_nested_dir_dict(path)
         util.merge_dicts(new_entries, self._entries)
 
@@ -121,9 +121,7 @@ class MockFS(object):
         if util.is_file(direntry):
             raise _OSError(errno.ENOTDIR, path)
         if util.is_dir(direntry):
-            entries = list(direntry.keys())
-            entries.sort()
-            return entries
+            return list(sorted(direntry.keys()))
         raise _OSError(errno.EINVAL, path)
 
     def walk(self, path):
@@ -133,7 +131,7 @@ class MockFS(object):
         Implements the :func:`os.walk` interface.
 
         """
-        path = util.sanitize(path)
+        path = self.abspath(path)
         inspect = [path]
         while True:
             dirstack = []
@@ -211,15 +209,23 @@ class MockFS(object):
         src_d = self._direntry(src)
         if src_d is None:
             raise _OSError(errno.ENOENT, src)
-        dst = util.sanitize(dst)
+        dst = self.abspath(dst)
         dst_d_parent = self._direntry(os.path.dirname(dst))
         dst_d_parent[os.path.basename(dst)] = copy.deepcopy(src_d)
 
     def glob(self, pattern):
         """Implementation of :py:func:`glob.glob`"""
-        pattern = util.sanitize(pattern)
+        # Keep relative glob paths relative
+        if os.path.isabs(pattern):
+            prefix = None
+        else:
+            prefix = self.cwd.getcwd()
+            if prefix != '/':
+                prefix += '/'
+
+        pattern = self.abspath(pattern)
         if pattern == '/':
-            return self._entries
+            return ['/']
 
         # Keep track of current likely candidate paths.
         # Each time we filter down, take the new candidates
@@ -251,12 +257,16 @@ class MockFS(object):
 
             entries = new_entries
             paths = new_paths
-        return paths
+
+        if prefix is None:
+            return paths
+        else:
+            return [p[len(prefix):] for p in paths]
 
     ## Internal Methods
-    def _direntry(self, path):
+    def _direntry(self, fspath):
         """Return the directory "dict" entry for a path"""
-        path = util.sanitize(path)
+        path = self.abspath(fspath)
         if path == '/':
             return self._entries
         elts = path.split('/')[1:]
@@ -275,6 +285,22 @@ class Cwd(object):
     def __init__(self, mfs):
         self._cwd = '/'
         self._mfs = mfs
+
+    def chdir(self, path):
+        # Make it absolute
+        if os.path.isabs(path):
+            cdpath = path
+        else:
+            cdpath = os.path.join(self._cwd, path)
+
+        entry = self._mfs._direntry(path)
+        if entry is None:
+            raise _OSError(errno.ENOENT, path)
+        elif not util.is_dir(entry):
+            raise _OSError(errno.ENOTDIR, path)
+
+        self._cwd = _abspath_builtin(cdpath)
+
     def getcwd(self):
         return self._cwd
 

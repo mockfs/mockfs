@@ -170,6 +170,51 @@ class MockFSTestCase(unittest.TestCase):
         values = glob.glob('/*/a/*')
         self.assertEquals(values, ['/a/a/a', '/a/a/b', '/b/a/a', '/b/a/b'])
 
+    def test_chdir(self):
+        self._mkfs()
+        os.chdir('/a/a/a')
+        self.assertEqual(os.getcwd(), '/a/a/a')
+
+    def test_chdir_file(self):
+        self._mkfs()
+        self.assertRaises(OSError, os.chdir, '/a/a/b')
+
+    def test_chdir_bogus(self):
+        self._mkfs()
+        self.assertRaises(OSError, os.chdir, '/does/not/exist')
+
+    def test_cwd(self):
+        self._mkfs()
+        os.chdir('/a')
+        self.assertEqual(os.getcwd(), '/a')
+
+    def test_cwd_rogue(self):
+        self._mkfs()
+        os.chdir('/////a/////')
+        self.assertEqual(os.getcwd(), '/a')
+
+    def test_chdir_and_relative_glob_from_root(self):
+        self._mkfs()
+        os.chdir('/')
+        globs = glob.glob('a/*/a')
+        self.assertEqual(globs, ['a/a/a', 'a/b/a'])
+
+    def test_chdir_and_relative_glob_from_subdir(self):
+        self._mkfs()
+        os.chdir('/a')
+        globs = glob.glob('*/a')
+        self.assertEqual(globs, ['a/a', 'b/a'])
+
+    def test_listdir_from_subdir(self):
+        filesystem = {
+                '/a/a': '',
+                '/a/b': '',
+                '/a/c/c': '',
+        }
+        self.mfs.add_entries(filesystem)
+        os.chdir('/a')
+        entries = os.listdir('.')
+        self.assertEqual(entries, ['a', 'b', 'c'])
 
 def suite():
     suite = unittest.TestSuite()
