@@ -4,6 +4,7 @@ import os
 import copy
 import errno
 import fnmatch
+import glob
 
 from mockfs import util
 
