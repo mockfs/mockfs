@@ -6,6 +6,7 @@ import errno
 import fnmatch
 import glob
 import shutil
+import sys
 
 from mockfs import util
 
@@ -223,26 +224,61 @@ class MockFS(object):
         dst_d_parent = self._direntry(os.path.dirname(dst))
         dst_d_parent[os.path.basename(dst)] = copy.deepcopy(src_d)
 
-    def rmtree(self, path):
+    def rmtree(self, path, ignore_errors=False, onerror=None):
+        """Recursively delete a directory tree.
+
+        If ignore_errors is set, errors are ignored; otherwise, if onerror
+        is set, it is called to handle the error with arguments (func,
+        path, exc_info) where func is os.listdir, os.remove, or os.rmdir;
+        path is the argument to that function that caused it to fail; and
+        exc_info is a tuple returned by sys.exc_info().  If ignore_errors
+        is false and onerror is None, an exception is raised.
+
+        """
         abspath = self.abspath(path)
+        if abspath == '/':
+            # Do not allow removing the root
+            if ignore_errors:
+                return
+            if onerror:
+                onerror(os.listdir, path, sys.exc_info())
+                return
+            raise _OSError(errno.EPERM, '/')
+
         entry = self._direntry(abspath)
         if entry is None:
+            if ignore_errors:
+                return
+            if onerror:
+                onerror(os.listdir, path, sys.exc_info())
+                return
             raise _OSError(errno.ENOENT, entry)
 
         if not self.isdir(path):
+            if ignore_errors:
+                return
+            if onerror:
+                onerror(os.rmdir, path, sys.exc_info())
+                return
             raise _OSError(errno.ENOTDIR, path)
 
         dirname = os.path.dirname(abspath)
         dirent = self._direntry(dirname)
         if dirent is None:
+            if ignore_errors:
+                return
+            if onerror:
+                onerror(os.listdir, path, sys.exc_info())
+                return
             raise _OSError(errno.ENOENT, dirname)
-
-        if dirname == '/':
-            # Do not allow removing the root
-            raise _OSError(errno.ENOPERM, '/')
 
         basename = os.path.basename(path)
         if basename not in dirent:
+            if ignore_errors:
+                return
+            if onerror:
+                onerror(os.rmdir, path, sys.exc_info())
+                return
             raise _OSError(errno.ENOENT, path)
 
         # Remove the directory

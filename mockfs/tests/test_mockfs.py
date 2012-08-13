@@ -2,6 +2,8 @@ import unittest
 # subjects under test
 import glob
 import os
+import shutil
+
 import mockfs
 
 
@@ -250,6 +252,16 @@ class MockFSTestCase(unittest.TestCase):
 
         b_size = os.path.getsize('b')
         self.assertEqual(b_size, 2)
+
+    def test_shutil_rmtree(self):
+        filesystem = {
+                '/a/a': '',
+                '/a/b': '',
+        }
+        self.mfs.add_entries(filesystem)
+
+        shutil.rmtree('/a')
+        self.assertEqual(os.listdir('/'), [])
 
 def suite():
     suite = unittest.TestSuite()
