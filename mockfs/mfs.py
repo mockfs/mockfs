@@ -67,7 +67,10 @@ class MockFS(object):
         return bool(dirent) and os.path.basename(path) in dirent
 
     def getsize(self, path):
+        """Return the size of a file, reported by os.stat()."""
         entry = self._direntry(path)
+        if entry is None:
+            raise _OSError(errno.ENOENT, path)
         return len(entry)
 
     def isdir(self, path):
