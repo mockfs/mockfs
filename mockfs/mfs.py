@@ -5,6 +5,7 @@ import copy
 import errno
 import fnmatch
 import glob
+import shutil
 
 from mockfs import util
 
@@ -25,6 +26,7 @@ builtins = {
         'os.remove': os.remove,
         'os.rmdir': os.rmdir,
         'glob.glob': glob.glob,
+        'shutil.rmtree': shutil.rmtree,
 }
 
 # We use the original abspath()
@@ -220,6 +222,31 @@ class MockFS(object):
         dst = self.abspath(dst)
         dst_d_parent = self._direntry(os.path.dirname(dst))
         dst_d_parent[os.path.basename(dst)] = copy.deepcopy(src_d)
+
+    def rmtree(self, path):
+        abspath = self.abspath(path)
+        entry = self._direntry(abspath)
+        if entry is None:
+            raise _OSError(errno.ENOENT, entry)
+
+        if not self.isdir(path):
+            raise _OSError(errno.ENOTDIR, path)
+
+        dirname = os.path.dirname(abspath)
+        dirent = self._direntry(dirname)
+        if dirent is None:
+            raise _OSError(errno.ENOENT, dirname)
+
+        if dirname == '/':
+            # Do not allow removing the root
+            raise _OSError(errno.ENOPERM, '/')
+
+        basename = os.path.basename(path)
+        if basename not in dirent:
+            raise _OSError(errno.ENOENT, path)
+
+        # Remove the directory
+        del dirent[basename]
 
     def glob(self, pattern):
         """Implementation of :py:func:`glob.glob`"""

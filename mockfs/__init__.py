@@ -1,5 +1,6 @@
 import os
 import glob
+import shutil
 
 from mockfs.mfs import MockFS
 from mockfs.mfs import builtins
@@ -49,6 +50,7 @@ def install(entries=None):
     os.remove = mfs.remove
     os.rmdir = mfs.rmdir
     glob.glob = mfs.glob
+    shutil.rmtree = mfs.rmtree
 
     return mfs
 
