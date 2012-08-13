@@ -13,11 +13,12 @@ builtins = {
         'os.chdir': os.chdir,
         'os.getcwd': os.getcwd,
         'os.getcwdu': os.getcwdu,
+        'os.path.abspath': os.path.abspath,
         'os.path.exists': os.path.exists,
+        'os.path.getsize': os.path.getsize,
         'os.path.islink': os.path.islink,
         'os.path.isdir': os.path.isdir,
         'os.path.isfile': os.path.isfile,
-        'os.path.abspath': os.path.abspath,
         'os.walk': os.walk,
         'os.listdir': os.listdir,
         'os.makedirs': os.makedirs,
@@ -64,6 +65,10 @@ class MockFS(object):
         if path == '/':
             return bool(dirent)
         return bool(dirent) and os.path.basename(path) in dirent
+
+    def getsize(self, path):
+        entry = self._direntry(path)
+        return len(entry)
 
     def isdir(self, path):
         """

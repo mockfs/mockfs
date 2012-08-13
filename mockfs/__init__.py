@@ -39,6 +39,7 @@ def install(entries=None):
     os.getcwdu = mfs.cwd.getcwdu
     os.path.abspath = mfs.abspath
     os.path.exists = mfs.exists
+    os.path.getsize = mfs.getsize
     os.path.islink = mfs.islink
     os.path.isdir = mfs.isdir
     os.path.isfile = mfs.isfile

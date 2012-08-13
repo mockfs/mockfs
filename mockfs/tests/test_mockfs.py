@@ -216,6 +216,41 @@ class MockFSTestCase(unittest.TestCase):
         entries = os.listdir('.')
         self.assertEqual(entries, ['a', 'b', 'c'])
 
+    def test_os_getsize(self):
+        filesystem = {
+                '/a/a': '',
+                '/a/b': '{}',
+        }
+        self.mfs.add_entries(filesystem)
+
+        a_size = os.path.getsize('/a/a')
+        self.assertEqual(a_size, 0)
+
+        b_size = os.path.getsize('/a/b')
+        self.assertEqual(b_size, 2)
+
+    def test_os_getsize_directory(self):
+        filesystem = {
+                '/a/a': '',
+                '/a/b': '',
+        }
+        self.mfs.add_entries(filesystem)
+        dir_size = os.path.getsize('/a')
+        self.assertEqual(dir_size, 2)
+
+    def test_os_getsize_subdir(self):
+        filesystem = {
+                '/a/a': '',
+                '/a/b': '{}',
+        }
+        self.mfs.add_entries(filesystem)
+        os.chdir('/a')
+        a_size = os.path.getsize('a')
+        self.assertEqual(a_size, 0)
+
+        b_size = os.path.getsize('b')
+        self.assertEqual(b_size, 2)
+
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(MockFSTestCase))
