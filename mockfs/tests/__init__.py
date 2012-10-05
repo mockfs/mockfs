@@ -1,13 +1,13 @@
 import unittest
-import mockfs
-import mockfs.tests.test_mockfs
-import mockfs.tests.test_util
+
+import mockfs.tests.mockfs_test
+import mockfs.tests.util_test
 
 
 def suite():
     suite = unittest.TestSuite()
-    suite.addTest(mockfs.tests.test_mockfs.suite())
-    suite.addTest(mockfs.tests.test_util.suite())
+    suite.addTest(mockfs.tests.mockfs_test.suite())
+    suite.addTest(mockfs.tests.util_test.suite())
     return suite
 
 

@@ -4,6 +4,7 @@ import shutil
 
 from mockfs.mfs import MockFS
 from mockfs.mfs import builtins
+from mockfs import storage
 
 __version__ = '0.8.0'
 
@@ -53,6 +54,9 @@ def install(entries=None):
     os.walk = mfs.walk
     shutil.rmtree = mfs.rmtree
 
+    storage.backend = mfs.backend
+    storage.replace_builtins()
+
     return mfs
 
 
@@ -66,3 +70,5 @@ def uninstall():
         for elt in name_elts:
             module = getattr(module, elt)
         setattr(module, func, v)
+
+    storage.restore_builtins()
