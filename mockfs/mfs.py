@@ -9,6 +9,7 @@ import shutil
 import sys
 
 from mockfs import util
+from mockfs import storage
 
 # Python functions to replace
 builtins = {
@@ -40,6 +41,23 @@ def _OSError(err, path):
     return OSError(err, os.strerror(err) + ": '%s'" % path)
 
 
+class StorageBackend(object):
+    def __init__(self, mfs):
+        self.mfs = mfs
+
+    def CheckForFile(self, filename):
+        return self.mfs.exists(filename)
+
+    def DeleteFile(self, filename):
+        self.mfs.remove(filename)
+
+    def LoadFile(self, filename):
+        return self.mfs.read(filename)
+
+    def SaveFile(self, filename, data):
+        self.mfs.add_entries({filename: data})
+
+
 class MockFS(object):
     """
     MockFS implementation object
@@ -50,6 +68,8 @@ class MockFS(object):
 
     def __init__(self):
         self.cwd = Cwd(self)
+        self.backend = StorageBackend(self)
+
         self._entries = {}
 
     def add_entries(self, entries):
@@ -76,6 +96,19 @@ class MockFS(object):
         if entry is None:
             raise _OSError(errno.ENOENT, path)
         return len(entry)
+
+    def read(self, path):
+        path = self.abspath(path)
+        dirname = os.path.dirname(path)
+        basename = os.path.basename(path)
+        entry = self._direntry(dirname)
+        if not util.is_dir(entry):
+            raise _OSError(errno.EPERM, path)
+
+        try:
+            return entry[basename]
+        except KeyError:
+            raise _OSError(errno.ENOENT, path)
 
     def isdir(self, path):
         """
