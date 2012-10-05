@@ -35,21 +35,22 @@ def install(entries=None):
         mfs.add_entries(entries)
 
     # Install functions
+    glob.glob = mfs.glob
     os.chdir = mfs.cwd.chdir
     os.getcwd = mfs.cwd.getcwd
     os.getcwdu = mfs.cwd.getcwdu
+    os.listdir = mfs.listdir
+    os.makedirs = mfs.makedirs
     os.path.abspath = mfs.abspath
     os.path.exists = mfs.exists
     os.path.getsize = mfs.getsize
     os.path.islink = mfs.islink
     os.path.isdir = mfs.isdir
     os.path.isfile = mfs.isfile
-    os.walk = mfs.walk
-    os.listdir = mfs.listdir
-    os.makedirs = mfs.makedirs
     os.remove = mfs.remove
     os.rmdir = mfs.rmdir
-    glob.glob = mfs.glob
+    os.unlink = mfs.remove
+    os.walk = mfs.walk
     shutil.rmtree = mfs.rmtree
 
     return mfs

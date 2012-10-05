@@ -12,6 +12,7 @@ from mockfs import util
 
 # Python functions to replace
 builtins = {
+        'glob.glob': glob.glob,
         'os.chdir': os.chdir,
         'os.getcwd': os.getcwd,
         'os.getcwdu': os.getcwdu,
@@ -26,7 +27,7 @@ builtins = {
         'os.makedirs': os.makedirs,
         'os.remove': os.remove,
         'os.rmdir': os.rmdir,
-        'glob.glob': glob.glob,
+        'os.unlink': os.unlink,
         'shutil.rmtree': shutil.rmtree,
 }
 
@@ -162,13 +163,13 @@ class MockFS(object):
             if not inspect:
                 raise StopIteration
 
-    def remove(self, fspath):
+    def remove(self, path):
         """Remove the entry for a file path
 
         Implements the :func:`os.remove` interface.
 
         """
-        path = self.abspath(fspath)
+        path = self.abspath(path)
         dirname = os.path.dirname(path)
         basename = os.path.basename(path)
         entry = self._direntry(dirname)
