@@ -22,11 +22,11 @@ Example Unit Test
 
     class ExampleTestCase(unittest.TestCase):
         def setUp(self):
-            self.mfs = mockfs.install()
+            self.mfs = mockfs.setup()
             self.mfs.add_entries({'/usr/bin/mockfs-magic': 'magic'})
 
         def tearDown(self):
-            mockfs.uninstall()
+            mockfs.teardown()
 
         def test_using_os_path(self):
             self.assertEqual(os.listdir('/usr/bin'), ['mockfs-magic'])
@@ -59,9 +59,9 @@ Currently supported functions:
 * :func:`os.walk`
 * :func:`shutil.rmtree`
 
-.. autofunction:: mockfs.install
+.. autofunction:: mockfs.setup
 
-.. autofunction:: mockfs.uninstall
+.. autofunction:: mockfs.teardown
 
 
 Developer Documentation

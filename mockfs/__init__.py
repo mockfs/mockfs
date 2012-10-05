@@ -6,10 +6,10 @@ from mockfs.mfs import MockFS
 from mockfs.mfs import builtins
 from mockfs import storage
 
-__version__ = '0.8.0'
+__version__ = '0.9.0'
 
 
-def install(entries=None):
+def setup(entries=None):
     """
     Replace builtin functions with mockfs.
 
@@ -21,14 +21,14 @@ def install(entries=None):
         import os
         import mockfs
 
-        fs = mockfs.install()
+        fs = mockfs.setup()
         fs.add_entries({
                 '/bin/sh': 'contents',
                 '/bin/ls': 'contents',
         ])
         assert(os.listdir('/bin') == ['ls', 'sh'])
 
-        mockfs.uninstall()
+        mockfs.teardown()
 
     """
     mfs = MockFS()
@@ -60,7 +60,7 @@ def install(entries=None):
     return mfs
 
 
-def uninstall():
+def teardown():
     """Restore the original builtin functions."""
     for k, v in builtins.items():
         mod, func = k.rsplit('.', 1) # 'os.path.isdir' -> ('os.path', 'isdir')

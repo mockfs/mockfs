@@ -9,10 +9,10 @@ import mockfs
 
 class MockFSTestCase(unittest.TestCase):
     def setUp(self):
-        self.mfs = mockfs.install()
+        self.mfs = mockfs.setup()
 
     def tearDown(self):
-        mockfs.uninstall()
+        mockfs.teardown()
 
     def _mkfs(self):
         filesystem = {
