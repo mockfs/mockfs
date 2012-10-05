@@ -16,7 +16,7 @@ original_open = __builtin__.open
 DEFAULT = object()
 
 # switch to a regex?
-READ_MODES = ('r', 'rb')
+READ_MODES = ('r', 'rb', 'rU')
 WRITE_MODES = ('w', 'wb', 'a', 'ab')
 
 MIXED_MODES = ('r+', 'r+b', 'w+', 'w+b', 'a+', 'a+b')
