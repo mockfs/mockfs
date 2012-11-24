@@ -9,7 +9,6 @@ import shutil
 import sys
 
 from mockfs import util
-from mockfs import storage
 
 # Python functions to replace
 builtins = {
