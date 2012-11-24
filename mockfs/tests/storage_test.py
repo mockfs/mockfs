@@ -8,10 +8,10 @@ import mockfs
 
 class StorageTestCase(unittest.TestCase):
     def setUp(self):
-        self.mfs = mockfs.setup()
+        self.mfs = mockfs.replace_builtins()
 
     def tearDown(self):
-        mockfs.teardown()
+        mockfs.restore_builtins()
 
     def _mkfs(self):
         filesystem = {

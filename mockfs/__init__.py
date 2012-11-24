@@ -6,29 +6,25 @@ from mockfs.mfs import MockFS
 from mockfs.mfs import builtins
 from mockfs import storage
 
-__version__ = '0.9.0'
+__version__ = '1.0.0'
 
 
-def setup(entries=None):
+def replace_builtins(entries=None):
     """
     Replace builtin functions with mockfs.
 
     :param entries: Dictionary mapping paths to content
-    :rtype MockFS: Newly installed :class:`mockfs.MockFS` handler
+    :returns: Newly installed :class:`mockfs.MockFS` handler
 
-    Example::
-
-        import os
-        import mockfs
-
-        fs = mockfs.setup()
-        fs.add_entries({
-                '/bin/sh': 'contents',
-                '/bin/ls': 'contents',
-        ])
-        assert(os.listdir('/bin') == ['ls', 'sh'])
-
-        mockfs.teardown()
+    >>> import os
+    >>> import mockfs
+    >>> fs = mockfs.replace_builtins()
+    >>> fs.add_entries({
+    ...         '/bin/sh': 'contents',
+    ...         '/bin/ls': 'contents',
+    ... })
+    >>> assert(os.listdir('/bin') == ['ls', 'sh'])
+    >>> mockfs.restore_builtins()
 
     """
     mfs = MockFS()
@@ -60,7 +56,7 @@ def setup(entries=None):
     return mfs
 
 
-def teardown():
+def restore_builtins():
     """Restore the original builtin functions."""
     for k, v in builtins.items():
         mod, func = k.rsplit('.', 1) # 'os.path.isdir' -> ('os.path', 'isdir')
