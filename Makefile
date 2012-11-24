@@ -4,6 +4,7 @@ prefix ?= $(CURDIR)/mockfs-$(version)
 docdir ?= $(DESTDIR)$(prefix)/share/doc/mockfs/html
 webdir ?= $(docdir)
 
+CTAGS ?= ctags
 NOSE ?= nosetests
 PYTHON ?= python
 RSYNC ?= rsync -r --stats --delete --exclude=.gitignore --exclude=.git
@@ -31,8 +32,11 @@ website-docs: docs
 	@mkdir -p $(DESTDIR)$(webdir)
 	@$(RSYNC) docs/build/html/ $(DESTDIR)$(webdir)/
 
+tags:
+	find mockfs -name '*.py' -print0 | xargs -0 $(CTAGS)
+
 test: all
 	@$(MAKE) -C docs doctest
 	@$(NOSE) --with-doctest
 
-.PHONY: all docs install install-docs website-docs test
+.PHONY: all docs install install-docs website-docs tags test

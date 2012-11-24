@@ -1,6 +1,7 @@
 /config.mak
 /Meta
 /build
+/tags
 *.py[co]
 *.swp
 *~
