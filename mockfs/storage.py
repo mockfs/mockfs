@@ -116,7 +116,11 @@ The preferred way to open a file is with the builtin open() function."""
         self._data = data
 
     def _open_write(self):
-        backend.SaveFile(self.name, '')
+        try:
+            backend.SaveFile(self.name, '')
+        except IOError, e:
+            self._closed = True
+            raise e
 
     def _open_append(self):
         if backend.CheckForFile(self.name):
