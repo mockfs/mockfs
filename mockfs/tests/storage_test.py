@@ -61,6 +61,9 @@ class StorageTestCase(unittest.TestCase):
 
         self.assertEqual(data, expected)
 
+    def test_dir_not_exists(self):
+        self.assertRaises(IOError, open, '/does/not/exist', 'w')
+
 
 def suite():
     suite = unittest.TestSuite()
