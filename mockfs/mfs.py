@@ -39,12 +39,14 @@ def _OSError(err, path):
     """Return an OSError with an appropriate error string"""
     return OSError(err, os.strerror(err) + ": '%s'" % path)
 
+
 def _IOError(err, path):
     """Return an IOError with an appropriate error string"""
     return IOError(err, os.strerror(err) + ": '%s'" % path)
 
 
 class StorageBackend(object):
+
     def __init__(self, mfs):
         self.mfs = mfs
 
