@@ -39,6 +39,10 @@ def _OSError(err, path):
     """Return an OSError with an appropriate error string"""
     return OSError(err, os.strerror(err) + ": '%s'" % path)
 
+def _IOError(err, path):
+    """Return an IOError with an appropriate error string"""
+    return IOError(err, os.strerror(err) + ": '%s'" % path)
+
 
 class StorageBackend(object):
     def __init__(self, mfs):
@@ -54,7 +58,12 @@ class StorageBackend(object):
         return self.mfs.read(filename)
 
     def SaveFile(self, filename, data):
-        self.mfs.add_entries({filename: data})
+        full_path = self.mfs.abspath(filename)
+        parent_dir = os.path.dirname(full_path)
+        if self.mfs.exists(parent_dir):
+            self.mfs.add_entries({filename: data})
+        else:
+            raise _IOError(errno.ENOENT, filename)
 
 
 class MockFS(object):
