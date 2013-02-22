@@ -41,6 +41,13 @@ class MockFSUtilTestCase(unittest.TestCase):
         self.assertEqual(b['a'], 1)
         self.assertEqual(b['b'], 2)
 
+    def test_merge_conflict_dicts(self):
+        src = {'a': {'b': 'src'}}
+        dst = {'a': {'b': 'dst'}}
+
+        util.merge_dicts(src, dst)
+        self.assertEqual(dst['a']['b'], 'src')
+
 
 def suite():
     suite = unittest.TestSuite()

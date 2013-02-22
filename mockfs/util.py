@@ -36,7 +36,7 @@ def merge_dicts(src, dst):
             dst[k] = v
             continue
         if type(dst[k]) is dict:
-            dst[k] = merge_dicts(dst[k], v)
+            dst[k] = merge_dicts(v, dst[k])
             continue
         if type(dst[k]) is list and type(v) is list:
             dst[k].extend(v)
