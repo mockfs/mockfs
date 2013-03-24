@@ -6,7 +6,7 @@ from mockfs.mfs import MockFS
 from mockfs.mfs import builtins
 from mockfs import storage
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 
 def replace_builtins(entries=None):
