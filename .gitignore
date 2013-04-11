@@ -3,6 +3,7 @@
 *.swp
 *~
 /Meta
-/build
 /config.mak
 /tags
+build
+dist
