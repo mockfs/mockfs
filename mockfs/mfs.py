@@ -1,10 +1,10 @@
 """mockfs: A simple mock filesystem for unit tests."""
 
-import os
 import copy
 import errno
 import fnmatch
 import glob
+import os
 import shutil
 import sys
 
@@ -12,23 +12,23 @@ from mockfs import util
 
 # Python functions to replace
 builtins = {
-        'glob.glob': glob.glob,
-        'os.chdir': os.chdir,
-        'os.getcwd': os.getcwd,
-        'os.getcwdu': os.getcwdu,
-        'os.path.abspath': os.path.abspath,
-        'os.path.exists': os.path.exists,
-        'os.path.getsize': os.path.getsize,
-        'os.path.islink': os.path.islink,
-        'os.path.isdir': os.path.isdir,
-        'os.path.isfile': os.path.isfile,
-        'os.walk': os.walk,
-        'os.listdir': os.listdir,
-        'os.makedirs': os.makedirs,
-        'os.remove': os.remove,
-        'os.rmdir': os.rmdir,
-        'os.unlink': os.unlink,
-        'shutil.rmtree': shutil.rmtree,
+    'glob.glob': glob.glob,
+    'os.chdir': os.chdir,
+    'os.getcwd': os.getcwd,
+    'os.getcwdu': os.getcwdu,
+    'os.path.abspath': os.path.abspath,
+    'os.path.exists': os.path.exists,
+    'os.path.getsize': os.path.getsize,
+    'os.path.islink': os.path.islink,
+    'os.path.isdir': os.path.isdir,
+    'os.path.isfile': os.path.isfile,
+    'os.walk': os.walk,
+    'os.listdir': os.listdir,
+    'os.makedirs': os.makedirs,
+    'os.remove': os.remove,
+    'os.rmdir': os.rmdir,
+    'os.unlink': os.unlink,
+    'shutil.rmtree': shutil.rmtree,
 }
 
 # We use the original abspath()

@@ -2,6 +2,7 @@ import unittest
 
 from mockfs import util
 
+
 class MockFSUtilTestCase(unittest.TestCase):
     def test_sanitize(self):
         """Test sanitize() with rogue paths"""
