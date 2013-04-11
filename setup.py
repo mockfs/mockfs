@@ -33,7 +33,7 @@ SETUP_ARGS = dict(
         'Programming Language :: Python'
     ],
     options={'clean': {'all': 1}},
-    packages=['mockfs'],
+    packages=['mockfs', 'mockfs.tests'],
 )
 
 
