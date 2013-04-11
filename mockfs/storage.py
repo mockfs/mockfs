@@ -1,15 +1,15 @@
 from warnings import warn
 import __builtin__
+import sys
 
-__all__ = (
-    'file', 'open',
-    'replace_builtins', 'restore_builtins',
-    'original_file', 'original_open'
-)
+__all__ = ['file', 'open', 'replace_builtins', 'restore_builtins',
+           'original_open']
 
-
-original_file = __builtin__.file
 original_open = __builtin__.open
+
+if sys.version_info[0] == 2:
+    original_file = __builtin__.file
+    __all__.append('original_file')
 
 
 # bad for introspection?
@@ -439,13 +439,15 @@ def open(name, mode='r'):
 
 def replace_builtins():
     "replace file and open in the builtin module"
-    __builtin__.file = file
+    if sys.version_info[0] == 2:
+        __builtin__.file = file
     __builtin__.open = open
 
 
 def restore_builtins():
     "restore the original file and open to the builtin module"
-    __builtin__.file = original_file
+    if sys.version_info[0] == 2:
+        __builtin__.file = original_file
     __builtin__.open = original_open
 
 
