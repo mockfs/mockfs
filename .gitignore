@@ -2,9 +2,11 @@
 *.py[co]
 *.swp
 *~
+.coverage
 /Meta
 /config.mak
 /tags
 __pycache__
 build
 dist
+htmlcov
