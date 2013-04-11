@@ -9,17 +9,14 @@
 
 
 import sys
-import mockfs
-import mockfs.mfs
-
 
 from setuptools import setup
 
 SETUP_ARGS = dict(
     name='mockfs',
-    version=mockfs.__version__,
+    version="1.0.1",
     description='Mock filesystem implementation for unit tests',
-    long_description=mockfs.mfs.__doc__,
+    long_description="",
     author='David Aguilar',
     author_email='davvid@gmail.com',
     url='https://github.com/mockfs/mockfs',
