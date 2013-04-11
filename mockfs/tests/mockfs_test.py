@@ -209,9 +209,9 @@ class MockFSTestCase(unittest.TestCase):
 
     def test_listdir_from_subdir(self):
         filesystem = {
-                '/a/a': '',
-                '/a/b': '',
-                '/a/c/c': '',
+            '/a/a': '',
+            '/a/b': '',
+            '/a/c/c': '',
         }
         self.mfs.add_entries(filesystem)
         os.chdir('/a')
@@ -220,8 +220,8 @@ class MockFSTestCase(unittest.TestCase):
 
     def test_os_getsize(self):
         filesystem = {
-                '/a/a': '',
-                '/a/b': '{}',
+            '/a/a': '',
+            '/a/b': '{}',
         }
         self.mfs.add_entries(filesystem)
 
@@ -233,8 +233,8 @@ class MockFSTestCase(unittest.TestCase):
 
     def test_os_getsize_directory(self):
         filesystem = {
-                '/a/a': '',
-                '/a/b': '',
+            '/a/a': '',
+            '/a/b': '',
         }
         self.mfs.add_entries(filesystem)
         dir_size = os.path.getsize('/a')
@@ -242,8 +242,8 @@ class MockFSTestCase(unittest.TestCase):
 
     def test_os_getsize_subdir(self):
         filesystem = {
-                '/a/a': '',
-                '/a/b': '{}',
+            '/a/a': '',
+            '/a/b': '{}',
         }
         self.mfs.add_entries(filesystem)
         os.chdir('/a')
@@ -255,13 +255,14 @@ class MockFSTestCase(unittest.TestCase):
 
     def test_shutil_rmtree(self):
         filesystem = {
-                '/a/a': '',
-                '/a/b': '',
+            '/a/a': '',
+            '/a/b': '',
         }
         self.mfs.add_entries(filesystem)
 
         shutil.rmtree('/a')
         self.assertEqual(os.listdir('/'), [])
+
 
 def suite():
     suite = unittest.TestSuite()

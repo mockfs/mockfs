@@ -1,15 +1,15 @@
-import __builtin__
-
-__all__ = (
-    'file', 'open',
-    'replace_builtins', 'restore_builtins',
-    'original_file', 'original_open'
-)
-
 from warnings import warn
+import __builtin__
+import sys
 
-original_file = __builtin__.file
+__all__ = ['file', 'open', 'replace_builtins', 'restore_builtins',
+           'original_open']
+
 original_open = __builtin__.open
+
+if sys.version_info[0] == 2:
+    original_file = __builtin__.file
+    __all__.append('original_file')
 
 
 # bad for introspection?
@@ -28,6 +28,8 @@ WRITE_MODES += MIXED_MODES
 # would need something a little less basic if os.read
 # is implemented...
 _fileno_counter = 2
+
+
 def get_new_fileno():
     global _fileno_counter
     _fileno_counter += 1
@@ -35,14 +37,16 @@ def get_new_fileno():
 
 
 class file(object):
-    """file(name[, mode]) -> file object
+    """
+    file(name[, mode]) -> file object
 
-Open a file.  The mode can be 'r', 'w' or 'a' for reading (default),
-writing or appending.  The file will be created if it doesn't exist
-when opened for writing or appending; it will be truncated when
-opened for writing.  Add a 'b' to the mode for binary files.
-Add a '+' to the mode to allow simultaneous reading and writing.
-The preferred way to open a file is with the builtin open() function."""
+    Open a file. The mode can be 'r', 'w' or 'a' for reading (default), writing
+    or appending. The file will be created if it doesn't exist when opened for
+    writing or appending; it will be truncated when opened for writing. Add a
+    'b' to the mode for binary files. Add a '+' to the mode to allow
+    simultaneous reading and writing. The preferred way to open a file is with
+    the builtin open() function.
+    """
 
     @property
     def mode(self):
@@ -75,11 +79,15 @@ The preferred way to open a file is with the builtin open() function."""
         return None
 
     def __init__(self, name, mode='r'):
-        "x.__init__(...) initializes x; see x.__class__.__doc__ for signature"
+        """
+        x.__init__(...) initializes x; see x.__class__.__doc__ for signature
+        """
         if not isinstance(name, basestring):
-            raise TypeError('File name argument must be str got: %s' % type(name))
+            raise TypeError(
+                'File name argument must be str got: %s' % type(name))
         if not isinstance(mode, basestring):
-            raise TypeError('File mode argument must be str got: %s' % type(mode))
+            raise TypeError(
+                'File mode argument must be str got: %s' % type(mode))
 
         self._name = name
         self._mode = mode
@@ -92,7 +100,10 @@ The preferred way to open a file is with the builtin open() function."""
         self._softspace = 0
 
         if mode not in ALL_MODES:
-            raise ValueError("The only supported modes are r(+)(b), w(+)(b) and a(+)(b), not %r" % mode)
+            raise ValueError((
+                "The only supported modes are"
+                " r(+)(b), w(+)(b) and a(+)(b),"
+                " not %r") % mode)
         if name == '':
             raise IOError("No such file or directory: ''")
 
@@ -118,7 +129,7 @@ The preferred way to open a file is with the builtin open() function."""
     def _open_write(self):
         try:
             backend.SaveFile(self.name, '')
-        except IOError, e:
+        except IOError as e:
             self._closed = True
             raise e
 
@@ -137,19 +148,21 @@ The preferred way to open a file is with the builtin open() function."""
             raise TypeError('Integer argument expected. Got %s' % type(arg))
         return arg
 
-
     def read(self, size=DEFAULT):
-        """read([size]) -> read at most size bytes, returned as a string.
+        """
+        read([size]) -> read at most size bytes, returned as a string.
 
-If the size argument is negative or omitted, read until EOF is reached.
-Notice that when in non-blocking mode, less data than what was requested
-may be returned, even if no size parameter was given."""
+        If the size argument is negative or omitted, read until EOF is reached.
+        Notice that when in non-blocking mode, less data than what was
+        requested may be returned, even if no size parameter was given.
+        """
         if self.mode not in READ_MODES:
             raise IOError('Bad file descriptor')
         if self.closed:
             raise ValueError('I/O operation on closed file')
         if self._in_iter:
-            raise ValueError('Mixing iteration and read methods would lose data')
+            raise ValueError(
+                'Mixing iteration and read methods would lose data')
 
         pos = self._position
         if pos == 0 and self.mode not in WRITE_MODES:
@@ -205,8 +218,6 @@ may return an exit status upon closing."""
         if self.mode in WRITE_MODES:
             backend.SaveFile(self.name, self._data)
 
-
-
     def __repr__(self):
         "x.__repr__() <==> repr(x)"
         state = 'open'
@@ -248,30 +259,37 @@ Note that not all file objects are seekable."""
         "tell() -> current file position, an integer (may be a long integer)."
         return self._position
 
-
     def flush(self):
         "flush() -> None.  Flush the internal I/O buffer."
         if self.mode not in WRITE_MODES:
             raise IOError('Bad file descriptor')
         backend.SaveFile(self.name, self._data)
 
-
     def isatty(self):
-        "isatty() -> true or false.  True if the file is connected to a tty device."
+        """
+        isatty() -> true or false.  True if the file is connected to a tty
+        device.
+        """
         return False
 
     def fileno(self):
-        """fileno() -> integer "file descriptor".
+        """
+        fileno() -> integer "file descriptor".
 
-This is needed for lower-level file interfaces, such os.read()."""
+        This is needed for lower-level file interfaces, such os.read().
+        """
         return self._fileno
 
     def __iter__(self):
-        "x.__iter__() <==> iter(x)"
+        """
+        x.__iter__() <==> iter(x)
+        """
         return self
 
     def next(self):
-        "x.next() -> the next value, or raise StopIteration"
+        """
+        x.next() -> the next value, or raise StopIteration
+        """
         if self.mode in WRITE_MODES:
             raise IOError('Bad file descriptor')
         self._in_iter = True
@@ -280,11 +298,13 @@ This is needed for lower-level file interfaces, such os.read()."""
         return self.readline()
 
     def readline(self, size=DEFAULT):
-        """readline([size]) -> next line from the file, as a string.
+        """
+        readline([size]) -> next line from the file, as a string.
 
-Retain newline.  A non-negative size argument limits the maximum
-number of bytes to return (an incomplete line may be returned then).
-Return an empty string at EOF."""
+        Retain newline. A non-negative size argument limits the maximum number
+        of bytes to return (an incomplete line may be returned then). Return
+        an empty string at EOF.
+        """
         if self.mode in WRITE_MODES:
             raise IOError('Bad file descriptor')
 
@@ -320,13 +340,14 @@ Return an empty string at EOF."""
         self._position += size
         return actual[:size]
 
-
     def readlines(self, size=DEFAULT):
-        """readlines([size]) -> list of strings, each a line from the file.
+        """
+        readlines([size]) -> list of strings, each a line from the file.
 
-Call readline() repeatedly and return a list of the lines so read.
-The optional size argument, if given, is an approximate bound on the
-total number of bytes in the lines returned."""
+        Call readline() repeatedly and return a list of the lines so read. The
+        optional size argument, if given, is an approximate bound on the total
+        number of bytes in the lines returned.
+        """
         if self.mode in WRITE_MODES:
             raise IOError('Bad file descriptor')
 
@@ -338,14 +359,14 @@ total number of bytes in the lines returned."""
         self._in_iter = False
         return result
 
-
     def xreadlines(self):
-        """xreadlines() -> returns self.
+        """
+        xreadlines() -> returns self.
 
-For backward compatibility. File objects now include the performance
-optimizations previously implemented in the xreadlines module."""
+        For backward compatibility. File objects now include the performance
+        optimizations previously implemented in the xreadlines module.
+        """
         return self
-
 
     def _set_softspace(self, value):
         self._softspace = self._check_int_argument(value)
@@ -353,14 +374,19 @@ optimizations previously implemented in the xreadlines module."""
     def _get_softspace(self):
         return self._softspace
 
-    softspace = property(_get_softspace, _set_softspace,
-                         doc="flag indicating that a space needs to be printed; used by print")
-
+    softspace = property(
+        _get_softspace,
+        _set_softspace,
+        doc="flag indicating that a space needs to be printed; used by print")
 
     def truncate(self, size=DEFAULT):
-        """truncate([size]) -> None.  Truncate the file to at most size bytes.
+        """
+        truncate([size]) -> None.
 
-Size defaults to the current file position, as returned by tell()."""
+        Truncate the file to at most size bytes.
+
+        Size defaults to the current file position, as returned by tell().
+        """
         if self.mode in READ_MODES:
             raise IOError('Bad file descriptor')
         if size is not DEFAULT:
@@ -373,12 +399,16 @@ Size defaults to the current file position, as returned by tell()."""
         self._data = data + (size - len(data)) * '\x00'
         self.flush()
 
-
     def writelines(self, sequence):
-        """writelines(sequence_of_strings) -> None.  Write the strings to the file.
+        """
+        writelines(sequence_of_strings) -> None.
 
-Note that newlines are not added.  The sequence can be any iterable object
-producing strings. This is equivalent to calling write() for each string."""
+        Write the strings to the file.
+
+        Note that newlines are not added.  The sequence can be any iterable
+        object producing strings. This is equivalent to calling write() for
+        each string.
+        """
         if self.mode not in WRITE_MODES:
             raise IOError('Bad file descriptor')
 
@@ -388,38 +418,41 @@ producing strings. This is equivalent to calling write() for each string."""
         for line in sequence:
             self.write(line)
 
-
     def __enter__(self):
         "__enter__() -> self."
         return self
-
 
     def __exit__(self, *excinfo):
         "__exit__(*excinfo) -> None.  Closes the file."
         self.close()
 
 
-
 def open(name, mode='r'):
-    """open(name[, mode]) -> file object
+    """
+    open(name[, mode]) -> file object
 
-Open a file using the file() type, returns a file object.  This is the
-preferred way to open a file."""
+    Open a file using the file() type, returns a file object.
+    This is the preferred way to open a file.
+    """
     return file(name, mode)
 
 
 def replace_builtins():
     "replace file and open in the builtin module"
-    __builtin__.file =  file
+    if sys.version_info[0] == 2:
+        __builtin__.file = file
     __builtin__.open = open
+
 
 def restore_builtins():
     "restore the original file and open to the builtin module"
-    __builtin__.file =  original_file
+    if sys.version_info[0] == 2:
+        __builtin__.file = original_file
     __builtin__.open = original_open
 
 
 _store = {}
+
 
 class backend(object):
     "Example backend."

@@ -1,5 +1,6 @@
 import os
 
+
 def is_file(entry):
     return isinstance(entry, basestring)
 
