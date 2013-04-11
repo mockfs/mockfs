@@ -34,6 +34,7 @@ SETUP_ARGS = dict(
     ],
     options={'clean': {'all': 1}},
     packages=['mockfs', 'mockfs.tests'],
+    test_suite='mockfs.tests.suite',
 )
 
 
