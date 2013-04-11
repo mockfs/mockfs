@@ -10,12 +10,12 @@ import sys
 
 from mockfs import util
 
+
 # Python functions to replace
 builtins = {
     'glob.glob': glob.glob,
     'os.chdir': os.chdir,
     'os.getcwd': os.getcwd,
-    'os.getcwdu': os.getcwdu,
     'os.path.abspath': os.path.abspath,
     'os.path.exists': os.path.exists,
     'os.path.getsize': os.path.getsize,
@@ -30,6 +30,10 @@ builtins = {
     'os.unlink': os.unlink,
     'shutil.rmtree': shutil.rmtree,
 }
+
+# On python2.x also replace os.getcwdu
+if sys.version_info[0] == 2:
+    builtins['os.getcwdu'] = os.getcwdu
 
 # We use the original abspath()
 _abspath_builtin = builtins['os.path.abspath']
