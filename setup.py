@@ -12,8 +12,8 @@ import sys
 import mockfs
 import mockfs.mfs
 
-from distutils.core import setup
 
+from setuptools import setup
 
 SETUP_ARGS = dict(
     name='mockfs',
