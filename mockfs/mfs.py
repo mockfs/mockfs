@@ -154,8 +154,16 @@ class MockFS(object):
         return False
 
     def makedirs(self, path):
-        """Create directory entries for a path"""
+        """Create directory entries for a path
+
+        Raise OSError if the path already exists.
+
+        """
         path = self.abspath(path)
+        entry = self._direntry(path)
+        if entry is not None:
+            raise _OSError(errno.EEXIST, path)
+
         new_entries = util.build_nested_dir_dict(path)
         util.merge_dicts(new_entries, self._entries)
 

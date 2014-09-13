@@ -8,6 +8,7 @@ import mockfs
 
 
 class MockFSTestCase(unittest.TestCase):
+
     def setUp(self):
         self.mfs = mockfs.replace_builtins()
 
@@ -262,6 +263,17 @@ class MockFSTestCase(unittest.TestCase):
 
         shutil.rmtree('/a')
         self.assertEqual(os.listdir('/'), [])
+
+    def test_os_makedirs_creates_new_entry(self):
+        os.makedirs('/new/directory')
+        self.assertTrue(os.path.isdir('/new/directory'))
+
+    def test_os_makedirs_raises_on_root(self):
+        self.assertRaises(OSError, os.makedirs, '/')
+
+    def test_os_makedirs_on_second_try(self):
+        os.makedirs('/new/directory')
+        self.assertRaises(OSError, os.makedirs, '/new/directory')
 
 
 def suite():
