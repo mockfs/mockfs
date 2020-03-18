@@ -2,6 +2,7 @@
 *.py[co]
 *.swp
 *~
+/env*
 /build
 /config.mak
 /.coverage
