@@ -1,14 +1,20 @@
 from warnings import warn
-import __builtin__
+try:
+    import builtins
+except ImportError:
+    import __builtin__ as builtins
 import sys
+
+from . import util
+
 
 __all__ = ['file', 'open', 'replace_builtins', 'restore_builtins',
            'original_open']
 
-original_open = __builtin__.open
+original_open = builtins.open
 
 if sys.version_info[0] == 2:
-    original_file = __builtin__.file
+    original_file = builtins.file
     __all__.append('original_file')
 
 
@@ -82,10 +88,10 @@ class file(object):
         """
         x.__init__(...) initializes x; see x.__class__.__doc__ for signature
         """
-        if not isinstance(name, basestring):
+        if not util.is_string(name):
             raise TypeError(
                 'File name argument must be str got: %s' % type(name))
-        if not isinstance(mode, basestring):
+        if not util.is_string(mode):
             raise TypeError(
                 'File mode argument must be str got: %s' % type(mode))
 
@@ -440,15 +446,15 @@ def open(name, mode='r'):
 def replace_builtins():
     "replace file and open in the builtin module"
     if sys.version_info[0] == 2:
-        __builtin__.file = file
-    __builtin__.open = open
+        builtins.file = file
+    builtins.open = open
 
 
 def restore_builtins():
     "restore the original file and open to the builtin module"
     if sys.version_info[0] == 2:
-        __builtin__.file = original_file
-    __builtin__.open = original_open
+        builtins.file = original_file
+    builtins.open = original_open
 
 
 _store = {}

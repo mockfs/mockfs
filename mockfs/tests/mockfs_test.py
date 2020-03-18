@@ -171,7 +171,7 @@ class MockFSTestCase(unittest.TestCase):
     def test_glob_multi(self):
         self._mkfs()
         values = glob.glob('/*/a/*')
-        self.assertEquals(values, ['/a/a/a', '/a/a/b', '/b/a/a', '/b/a/b'])
+        self.assertEqual(values, ['/a/a/a', '/a/a/b', '/b/a/a', '/b/a/b'])
 
     def test_chdir(self):
         self._mkfs()

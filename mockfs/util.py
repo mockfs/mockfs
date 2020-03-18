@@ -1,8 +1,21 @@
 import os
+import sys
+
+PY3 = sys.version_info[0] > 2
 
 
-def is_file(entry):
-    return isinstance(entry, basestring)
+def is_string(value):
+    """Is value a string?"""
+    if PY3:
+        result = isinstance(value, str)
+    else:
+        result = isinstance(value, basestring)
+    return result
+
+
+def is_file(value):
+    """Is value a file?  Equivalent to checking for strings"""
+    return is_string(value)
 
 
 def is_dir(entry):
