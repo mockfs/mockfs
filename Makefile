@@ -1,6 +1,6 @@
 CTAGS ?= ctags
-NOSE ?= nosetests
 PYTHON ?= python
+PYTEST ?= $(PYTHON) -m pytest
 RSYNC ?= rsync -r --stats --delete --exclude=.gitignore --exclude=.git
 RM ?= rm
 
@@ -55,6 +55,6 @@ tags:
 
 test: all
 	@$(MAKE) -C docs doctest
-	@$(NOSE) --with-doctest
+	@$(PYTEST) --doctest-modules mockfs
 
 .PHONY: all docs install install-docs website-docs tags test
