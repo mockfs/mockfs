@@ -14,7 +14,7 @@ from setuptools import setup
 
 SETUP_ARGS = dict(
     name='mockfs',
-    version="1.0.2",
+    version="1.1.0",
     description='Mock filesystem implementation for unit tests',
     long_description="",
     author='David Aguilar',
@@ -32,6 +32,11 @@ SETUP_ARGS = dict(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
