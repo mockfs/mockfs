@@ -292,7 +292,7 @@ Note that not all file objects are seekable."""
         """
         return self
 
-    def next(self):
+    def __next__(self):
         """
         x.next() -> the next value, or raise StopIteration
         """
@@ -302,6 +302,8 @@ Note that not all file objects are seekable."""
         if self._position >= len(self._data):
             raise StopIteration
         return self.readline()
+
+    next = __next__ # Python2
 
     def readline(self, size=DEFAULT):
         """
