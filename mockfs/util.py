@@ -1,16 +1,11 @@
 import os
-import sys
 
-PY3 = sys.version_info[0] > 2
+from . import compat
 
 
 def is_string(value):
     """Is value a string?"""
-    if PY3:
-        result = isinstance(value, str)
-    else:
-        result = isinstance(value, basestring)
-    return result
+    return isinstance(value, compat.string_types)
 
 
 def is_file(value):

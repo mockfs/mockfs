@@ -1,10 +1,8 @@
 from warnings import warn
-try:
-    import __builtin__ as builtins
-except ImportError:
-    import builtins
 import sys
 
+from .compat import builtins
+from . import compat
 from . import util
 
 
@@ -150,7 +148,7 @@ class file(object):
         if isinstance(arg, float):
             arg = int(arg)
             warn(DeprecationWarning('Integer argument expected got float'))
-        elif not isinstance(arg, (int, long)):
+        elif not isinstance(arg, compat.int_types):
             raise TypeError('Integer argument expected. Got %s' % type(arg))
         return arg
 
