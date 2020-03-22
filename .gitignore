@@ -3,6 +3,7 @@
 *.swp
 *~
 /env*
+/.eggs
 /build
 /config.mak
 /.coverage
