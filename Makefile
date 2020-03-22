@@ -35,24 +35,12 @@ BLACK_ENABLED := $(shell sh -c 'type black >/dev/null 2>&1 && echo 1 || echo 0')
 # Site configuration goes in untracked config.mak
 -include config.mak
 
-all: mockfs/*.py setup.py
+all:: mockfs/*.py setup.py
 	@echo mockfs v$(version)
 	$(PYTHON) setup.py build
 
 install: all
 	$(PYTHON) setup.py install $(SETUP_INSTALL_ARGS)
-
-docs: all
-	@$(RM) -rf docs/build
-	@$(MAKE) -C docs html
-
-install-doc: docs
-	@mkdir -p $(DESTDIR)$(docdir)
-	@$(RSYNC) docs/build/html/ $(DESTDIR)$(docdir)/
-
-website-docs: docs
-	@mkdir -p $(DESTDIR)$(webdir)
-	@$(RSYNC) docs/build/html/ $(DESTDIR)$(webdir)/
 
 tags:
 	find mockfs -name '*.py' -print0 | xargs -0 $(CTAGS)
@@ -70,4 +58,4 @@ ifeq ($(BLACK_ENABLED),1)
 	| xargs -0 black --skip-string-normalization --target-version py27
 endif
 
-.PHONY: all docs install install-docs website-docs tags test
+.PHONY: all install tags test
