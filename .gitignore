@@ -12,3 +12,4 @@
 /MANIFEST
 /__pycache__
 /tags
+/.tox

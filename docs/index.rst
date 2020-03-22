@@ -1,14 +1,15 @@
-.. mockfs documentation master file, created by
-   sphinx-quickstart on Thu Dec 10 19:55:42 2009.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 ========================================================
 :mod:`mockfs` -- A simple mock filesystem for unit tests
 ========================================================
 
 `mockfs` makes it possible to test filesystem-dependent code by
 replacing functions from the :mod:`os` and :mod:`glob` modules.
+
+.. toctree::
+   :maxdepth: 1
+
+   history
+
 
 Example Unit Test
 =================
@@ -68,9 +69,15 @@ Developer Documentation
 =======================
 
 .. toctree::
-    :maxdepth: 3
+   :maxdepth: 3
 
-    api
+   api
+   history
+
+.. automodule:: mockfs
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Indices and tables
 ==================

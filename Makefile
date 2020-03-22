@@ -3,6 +3,7 @@ PYTHON ?= python
 PYTEST ?= $(PYTHON) -m pytest
 RSYNC ?= rsync -r --stats --delete --exclude=.gitignore --exclude=.git
 RM ?= rm
+TOX ?= tox
 
 # Define MOCKFS_PREFIX in the environment to override the default prefix,
 # or supply "DESTDIR" and "prefix" on the command-line, e.g.
@@ -56,5 +57,8 @@ tags:
 test: all
 	@$(MAKE) -C docs doctest
 	@$(PYTEST) --doctest-modules mockfs
+
+tox:
+	@$(TOX) --skip-missing-interpreters -e py27,py34,py35,py36,py37,py38
 
 .PHONY: all docs install install-docs website-docs tags test
