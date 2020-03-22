@@ -59,7 +59,7 @@ def replace_builtins(entries=None):
 def restore_builtins():
     """Restore the original builtin functions."""
     for k, v in builtins.items():
-        mod, func = k.rsplit('.', 1) # 'os.path.isdir' -> ('os.path', 'isdir')
+        mod, func = k.rsplit('.', 1)  # 'os.path.isdir' -> ('os.path', 'isdir')
         name_elts = mod.split('.')
         top = name_elts.pop(0)
         module = globals()[top]

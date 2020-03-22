@@ -6,8 +6,7 @@ from . import compat
 from . import util
 
 
-__all__ = ['file', 'open', 'replace_builtins', 'restore_builtins',
-           'original_open']
+__all__ = ['file', 'open', 'replace_builtins', 'restore_builtins', 'original_open']
 
 original_open = builtins.open
 
@@ -87,11 +86,9 @@ class file(object):
         x.__init__(...) initializes x; see x.__class__.__doc__ for signature
         """
         if not util.is_string(name):
-            raise TypeError(
-                'File name argument must be str got: %s' % type(name))
+            raise TypeError('File name argument must be str got: %s' % type(name))
         if not util.is_string(mode):
-            raise TypeError(
-                'File mode argument must be str got: %s' % type(mode))
+            raise TypeError('File mode argument must be str got: %s' % type(mode))
 
         self._name = name
         self._mode = mode
@@ -104,10 +101,14 @@ class file(object):
         self._softspace = 0
 
         if mode not in ALL_MODES:
-            raise ValueError((
-                "The only supported modes are"
-                " r(+)(b), w(+)(b) and a(+)(b),"
-                " not %r") % mode)
+            raise ValueError(
+                (
+                    "The only supported modes are"
+                    " r(+)(b), w(+)(b) and a(+)(b),"
+                    " not %r"
+                )
+                % mode
+            )
         if name == '':
             raise IOError("No such file or directory: ''")
 
@@ -165,8 +166,7 @@ class file(object):
         if self.closed:
             raise ValueError('I/O operation on closed file')
         if self._in_iter:
-            raise ValueError(
-                'Mixing iteration and read methods would lose data')
+            raise ValueError('Mixing iteration and read methods would lose data')
 
         pos = self._position
         if pos == 0 and self.mode not in WRITE_MODES:
@@ -181,7 +181,7 @@ class file(object):
             if size < 0:
                 size = len(self._data)
 
-        data = self._data[pos: pos + size]
+        data = self._data[pos : pos + size]
         self._position += len(data)
         return data
 
@@ -205,7 +205,7 @@ the file on disk reflects the data written."""
         position = self._position
         start = self._data[:position]
         padding = (position - len(start)) * '\x00'
-        end = self._data[position + len(data):]
+        end = self._data[position + len(data) :]
         self._data = start + padding + data + end
         self._position = position + len(data)
 
@@ -301,7 +301,7 @@ Note that not all file objects are seekable."""
             raise StopIteration
         return self.readline()
 
-    next = __next__ # Python2
+    next = __next__  # Python2
 
     def readline(self, size=DEFAULT):
         """
@@ -337,9 +337,9 @@ Note that not all file objects are seekable."""
 
         if size is DEFAULT:
             self._position = position + poz + 1
-            return remaining[:poz + 1]
+            return remaining[: poz + 1]
 
-        actual = remaining[:poz + 1]
+        actual = remaining[: poz + 1]
         if len(actual) <= size:
             self._position += len(actual)
             return actual
@@ -383,7 +383,8 @@ Note that not all file objects are seekable."""
     softspace = property(
         _get_softspace,
         _set_softspace,
-        doc="flag indicating that a space needs to be printed; used by print")
+        doc="flag indicating that a space needs to be printed; used by print",
+    )
 
     def truncate(self, size=DEFAULT):
         """

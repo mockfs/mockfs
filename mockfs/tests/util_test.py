@@ -11,8 +11,7 @@ class MockFSUtilTestCase(unittest.TestCase):
         self.assertEqual(util.sanitize('///usr//bin'), '/usr/bin')
 
     def test_build_nested_dict(self):
-        nested = util.build_nested_dict({'/foo': 'bar',
-                                         '/a/b/c': 'c'})
+        nested = util.build_nested_dict({'/foo': 'bar', '/a/b/c': 'c'})
         self.assertEqual(nested['foo'], 'bar')
         self.assertEqual(nested['a'], {'b': {'c': 'c'}})
 

@@ -1,4 +1,5 @@
 import unittest
+
 # subjects under test
 import glob
 import os
@@ -8,7 +9,6 @@ import mockfs
 
 
 class MockFSTestCase(unittest.TestCase):
-
     def setUp(self):
         self.mfs = mockfs.replace_builtins()
 
@@ -17,10 +17,14 @@ class MockFSTestCase(unittest.TestCase):
 
     def _mkfs(self):
         filesystem = {
-            '/a/a/a': {}, '/a/a/b': '',
-            '/a/b/a': {}, '/a/b/b': '',
-            '/b/a/a': {}, '/b/a/b': '',
-            '/b/b/a': {}, '/b/b/b': '',
+            '/a/a/a': {},
+            '/a/a/b': '',
+            '/a/b/a': {},
+            '/a/b/b': '',
+            '/b/a/a': {},
+            '/b/a/b': '',
+            '/b/b/a': {},
+            '/b/b/b': '',
         }
         self.mfs.add_entries(filesystem)
 

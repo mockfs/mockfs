@@ -50,7 +50,6 @@ def _IOError(err, path):
 
 
 class StorageBackend(object):
-
     def __init__(self, mfs):
         self.mfs = mfs
 
@@ -388,9 +387,9 @@ class MockFS(object):
         if prefix is None:
             return paths
         else:
-            return [p[len(prefix):] for p in paths]
+            return [p[len(prefix) :] for p in paths]
 
-    ## Internal Methods
+    # Internal Methods
     def _direntry(self, fspath):
         """Return the directory "dict" entry for a path"""
         path = self.abspath(fspath)
