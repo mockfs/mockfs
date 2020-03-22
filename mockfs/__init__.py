@@ -2,9 +2,10 @@ import os
 import glob
 import shutil
 
-from mockfs.mfs import MockFS
-from mockfs.mfs import builtins
-from mockfs import storage
+from .mfs import MockFS
+from .mfs import builtins
+from . import compat
+from . import storage
 
 __version__ = '1.1.0'
 

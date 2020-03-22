@@ -8,7 +8,8 @@ import os
 import shutil
 import sys
 
-from mockfs import util
+from . import compat
+from . import util
 
 
 # Python functions to replace
