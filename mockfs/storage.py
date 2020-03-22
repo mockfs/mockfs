@@ -1,8 +1,8 @@
 from warnings import warn
 try:
-    import builtins
-except ImportError:
     import __builtin__ as builtins
+except ImportError:
+    import builtins
 import sys
 
 from . import util
