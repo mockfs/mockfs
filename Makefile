@@ -46,11 +46,10 @@ tags:
 	find mockfs -name '*.py' -print0 | xargs -0 $(CTAGS)
 
 test: all
-	@$(MAKE) -C docs doctest
-	@$(PYTEST) --doctest-modules mockfs
+	$(PYTEST) mockfs
 
 tox:
-	@$(TOX) --skip-missing-interpreters -e py27,py34,py35,py36,py37,py38
+	$(TOX) --skip-missing-interpreters -e py27,py34,py35,py36,py37,py38
 
 format::
 ifeq ($(BLACK_ENABLED),1)
