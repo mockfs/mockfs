@@ -1,3 +1,4 @@
+BLACK ?= black
 CTAGS ?= ctags
 PYTHON ?= python
 PYTEST ?= $(PYTHON) -m pytest
@@ -28,6 +29,8 @@ ifndef mac_pkg
     SETUP_INSTALL_ARGS += --prefix=$(prefix)
     SETUP_INSTALL_ARGS += --install-lib=$(pythonsite)
 endif
+
+BLACK_ENABLED := $(shell sh -c 'type black >/dev/null 2>&1 && echo 1 || echo 0')
 
 # Site configuration goes in untracked config.mak
 -include config.mak
@@ -60,5 +63,11 @@ test: all
 
 tox:
 	@$(TOX) --skip-missing-interpreters -e py27,py34,py35,py36,py37,py38
+
+format::
+ifeq ($(BLACK_ENABLED),1)
+	$(SILENT)git ls-files -z -- '*.py' \
+	| xargs -0 black --skip-string-normalization --target-version py27
+endif
 
 .PHONY: all docs install install-docs website-docs tags test
