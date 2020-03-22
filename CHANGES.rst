@@ -1,5 +1,6 @@
 v1.1.1
 ======
+    * Skip patching `os.getcwdu` in `mockfs.install` on Python 3.
     * Code is now formatted using `black`.
     * Add Tox testing integration wtih Travis-CI.
     * Improve Python 3 compatibility.

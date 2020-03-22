@@ -36,7 +36,6 @@ def replace_builtins(entries=None):
     glob.glob = mfs.glob
     os.chdir = mfs.cwd.chdir
     os.getcwd = mfs.cwd.getcwd
-    os.getcwdu = mfs.cwd.getcwdu
     os.listdir = mfs.listdir
     os.makedirs = mfs.makedirs
     os.path.abspath = mfs.abspath
@@ -50,6 +49,8 @@ def replace_builtins(entries=None):
     os.unlink = mfs.remove
     os.walk = mfs.walk
     shutil.rmtree = mfs.rmtree
+    if compat.PY2:
+        os.getcwdu = mfs.cwd.getcwdu
 
     storage.backend = mfs.backend
     storage.replace_builtins()

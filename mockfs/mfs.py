@@ -33,7 +33,7 @@ builtins = {
 }
 
 # On python2.x also replace os.getcwdu
-if sys.version_info[0] == 2:
+if compat.PY2:
     builtins['os.getcwdu'] = os.getcwdu
 
 # We use the original abspath()

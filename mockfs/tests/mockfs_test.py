@@ -6,6 +6,7 @@ import os
 import shutil
 
 import mockfs
+from mockfs import compat
 
 
 class MockFSTestCase(unittest.TestCase):
@@ -199,6 +200,14 @@ class MockFSTestCase(unittest.TestCase):
         self._mkfs()
         os.chdir('/////a/////')
         self.assertEqual(os.getcwd(), '/a')
+
+    def test_no_getcwdu_on_python3(self):
+        """os.getcwd() should not exist on python3"""
+        # Ensures that we don't patch os.getcwdu on Python3.
+        if compat.PY2:
+            self.assertTrue(hasattr(os, 'getcwdu'))
+        else:
+            self.assertFalse(hasattr(os, 'getcwdu'))
 
     def test_chdir_and_relative_glob_from_root(self):
         self._mkfs()
