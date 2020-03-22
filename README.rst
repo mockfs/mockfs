@@ -1,16 +1,16 @@
-.. image:: https://img.shields.io/pypi/v/skeleton.svg
+.. image:: https://img.shields.io/pypi/v/mockfs.svg
    :target: `PyPI link`_
 
-.. image:: https://img.shields.io/pypi/pyversions/skeleton.svg
+.. image:: https://img.shields.io/pypi/pyversions/mockfs.svg
    :target: `PyPI link`_
 
-.. _PyPI link: https://pypi.org/project/skeleton
+.. _PyPI link: https://pypi.org/project/mockfs
 
-.. image:: https://dev.azure.com/jaraco/skeleton/_apis/build/status/jaraco.skeleton?branchName=master
-   :target: https://dev.azure.com/jaraco/skeleton/_build/latest?definitionId=1&branchName=master
+.. .. image:: https://dev.azure.com/jaraco/skeleton/_apis/build/status/jaraco.skeleton?branchName=master
+..    :target: https://dev.azure.com/jaraco/skeleton/_build/latest?definitionId=1&branchName=master
 
-.. image:: https://img.shields.io/travis/jaraco/skeleton/master.svg
-   :target: https://travis-ci.org/jaraco/skeleton
+.. .. image:: https://img.shields.io/travis/jaraco/skeleton/master.svg
+..    :target: https://travis-ci.org/jaraco/skeleton
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/psf/black
@@ -21,3 +21,11 @@
 
 .. .. image:: https://readthedocs.org/projects/skeleton/badge/?version=latest
 ..    :target: https://skeleton.readthedocs.io/en/latest/?badge=latest
+
+
+=================================================
+mockfs -- A simple mock filesystem for unit tests
+=================================================
+
+`mockfs` makes it possible to test filesystem-dependent code by
+replacing functions from the :mod:`os` and :mod:`glob` modules.
