@@ -1,5 +1,6 @@
 [run]
 omit = .tox/*, env*
+source = mockfs
 
 [report]
 show_missing = True

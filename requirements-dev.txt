@@ -3,7 +3,7 @@ pytest
 pytest-cov
 pytest-flake8
 pytest-checkdocs; python_version > '3.0'
-pytest-black; python_version > '3.0'
+pytest-black-multipy
 sphinx
 jaraco.packaging
 rst.linker
