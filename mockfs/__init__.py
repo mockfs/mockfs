@@ -7,7 +7,7 @@ from .mfs import builtins
 from . import compat
 from . import storage
 
-__version__ = '1.1.0'
+__version__ = '1.1.1'
 
 
 def replace_builtins(entries=None):
