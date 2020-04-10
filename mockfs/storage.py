@@ -93,12 +93,15 @@ class file(object):
         self._name = name
         self._mode = mode
         self._position = 0
-        self._data = ''
         self._closed = False
         self._binary = mode.endswith('b')
         self._fileno = get_new_fileno()
         self._in_iter = False
         self._softspace = 0
+        if self._binary:
+            self._data = b''
+        else:
+            self._data = ''
 
         if mode not in ALL_MODES:
             raise ValueError(
@@ -199,12 +202,15 @@ the file on disk reflects the data written."""
 
         if not data:
             return
-        if not self._binary:
+        if self._binary:
+            null = b'\x00'
+        else:
+            null = '\x00'
             data = data.replace('\n', '\r\n')
 
         position = self._position
         start = self._data[:position]
-        padding = (position - len(start)) * '\x00'
+        padding = (position - len(start)) * null
         end = self._data[position + len(data) :]
         self._data = start + padding + data + end
         self._position = position + len(data)

@@ -61,6 +61,21 @@ class StorageTestCase(unittest.TestCase):
 
         self.assertEqual(data, expected)
 
+    def test_open_rw_bytes(self):
+        self._mkfs()
+        expected = b'\xff\xef\xdf\xaf'
+
+        fh = open('/a/a/b', 'wb')
+        fh.write(expected)
+        fh.close()
+
+        fh = open('/a/a/b', 'rb')
+        data = fh.read()
+        fh.close()
+
+        self.assertEqual(len(data), 4)
+        self.assertEqual(data, expected)
+
     def test_dir_not_exists(self):
         self.assertRaises(IOError, open, '/does/not/exist', 'w')
 
