@@ -191,8 +191,9 @@ class file(object):
     def write(self, data):
         """write(str) -> None.  Write string str to file.
 
-Note that due to buffering, flush() or close() may be needed before
-the file on disk reflects the data written."""
+        Note that due to buffering, flush() or close() may be needed before
+        the file on disk reflects the data written.
+        """
         if self.mode not in WRITE_MODES:
             raise IOError('Bad file descriptor')
         if self.closed:
@@ -218,10 +219,11 @@ the file on disk reflects the data written."""
     def close(self):
         """close() -> None or (perhaps) an integer.  Close the file.
 
-Sets data attribute .closed to True.  A closed file cannot be used for
-further I/O operations.  close() may be called more than once without
-error.  Some kinds of file objects (for example, opened by popen())
-may return an exit status upon closing."""
+        Sets data attribute .closed to True.  A closed file cannot be used for
+        further I/O operations.  close() may be called more than once without
+        error.  Some kinds of file objects (for example, opened by popen())
+        may return an exit status upon closing.
+        """
         if self.closed:
             return
         self._closed = True
@@ -242,14 +244,15 @@ may return an exit status upon closing."""
     def seek(self, position, whence=0):
         """seek(offset[, whence]) -> None.  Move to new file position.
 
-Argument offset is a byte count.  Optional argument whence defaults to
-0 (offset from start of file, offset should be >= 0); other values are 1
-(move relative to current position, positive or negative), and 2 (move
-relative to end of file, usually negative, although many platforms allow
-seeking beyond the end of a file).  If the file is opened in text mode,
-only offsets returned by tell() are legal.  Use of other offsets causes
-undefined behavior.
-Note that not all file objects are seekable."""
+        Argument offset is a byte count.  Optional argument whence defaults to
+        0 (offset from start of file, offset should be >= 0); other values are 1
+        (move relative to current position, positive or negative), and 2 (move
+        relative to end of file, usually negative, although many platforms allow
+        seeking beyond the end of a file).  If the file is opened in text mode,
+        only offsets returned by tell() are legal.  Use of other offsets causes
+        undefined behavior.
+        Note that not all file objects are seekable.
+        """
         position = self._check_int_argument(position)
         whence = self._check_int_argument(whence)
         if not 0 <= whence <= 2:
