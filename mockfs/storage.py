@@ -1,4 +1,5 @@
 from warnings import warn
+import codecs
 import sys
 
 from .compat import builtins
@@ -9,6 +10,7 @@ from . import util
 __all__ = ['file', 'open', 'replace_builtins', 'restore_builtins', 'original_open']
 
 original_open = builtins.open
+original_codecs_open = codecs.open
 
 if sys.version_info[0] == 2:
     original_file = builtins.file
@@ -443,7 +445,7 @@ class file(object):
         self.close()
 
 
-def open(name, mode='r'):
+def open(name, mode='r', encoding=None, errors=None):
     """
     open(name[, mode]) -> file object
 
@@ -458,6 +460,7 @@ def replace_builtins():
     if sys.version_info[0] == 2:
         builtins.file = file
     builtins.open = open
+    codecs.open = open
 
 
 def restore_builtins():
@@ -465,6 +468,7 @@ def restore_builtins():
     if sys.version_info[0] == 2:
         builtins.file = original_file
     builtins.open = original_open
+    codecs.open = original_codecs_open
 
 
 _store = {}
