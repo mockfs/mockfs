@@ -1,3 +1,13 @@
+v1.1.3
+======
+    * `replace_builtins()` now patches `codecs.open` as well.
+
+v1.1.2
+======
+    * Restored Python 2 compatibility. Python 2 compatibility will be removed in a
+      future release.
+    * Properly handle writing bytes on Python 3.
+
 v1.1.1
 ======
     * Skip patching `os.getcwdu` in `mockfs.install` on Python 3.
