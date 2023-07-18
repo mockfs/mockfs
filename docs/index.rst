@@ -60,10 +60,6 @@ Currently supported functions:
 * :func:`os.walk`
 * :func:`shutil.rmtree`
 
-.. autofunction:: mockfs.replace_builtins
-
-.. autofunction:: mockfs.restore_builtins
-
 
 Developer Documentation
 =======================
