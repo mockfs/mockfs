@@ -40,12 +40,10 @@ Example Unit Test
 
 Currently supported functions:
 
-* :func:`__builtins__.open`
-* :func:`__builtins__.close`
+* :func:`open`
 * :func:`glob.glob`
 * :func:`os.chdir`
 * :func:`os.getcwd`
-* :func:`os.getcwdu`
 * :func:`os.listdir`
 * :func:`os.makedirs`
 * :func:`os.path.abspath`
