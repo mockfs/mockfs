@@ -15,7 +15,7 @@ def replace_builtins(entries=None):
     Replace builtin functions with mockfs.
 
     :param entries: Dictionary mapping paths to content
-    :returns: Newly installed :class:`mockfs.MockFS` handler
+    :returns: Newly installed :class:`mockfs.mfs.MockFS` instance.
 
     >>> import os
     >>> import mockfs

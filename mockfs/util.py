@@ -55,11 +55,9 @@ def merge_dicts(src, dst):
 
 
 def build_nested_dict(entries):
-    """
-    Convert a flat dict of paths to a nested dict
+    """Convert a flat dict of paths to a nested dict
 
-    :param entries: Path to entry dictionary
-    :type entries: :py:data:`dict`
+    :param dict entries: Path to entry dictionary
 
     e.g. `{'/unix/path': 'content', '/unix/dir': {},}`
 
@@ -86,9 +84,7 @@ def build_nested_dict(entries):
 def build_nested_dir_dict(dirpath):
     """Build a nested dict of dicts from a directory path
 
-    :param dirpath: Directory path
-    :type dirpath: :py:data:`str`
-
+    :param str dirpath: Directory path
     """
     result = {}
     path = sanitize(dirpath)
