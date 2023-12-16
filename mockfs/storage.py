@@ -55,32 +55,32 @@ class file(object):
 
     @property
     def mode(self):
-        "file mode, one of r(+)(b), w(+)(b) or a(+)(b)"
+        """file mode, one of r(+)(b), w(+)(b) or a(+)(b)"""
         return self._mode
 
     @property
     def name(self):
-        "file name"
+        """file name"""
         return self._name
 
     @property
     def closed(self):
-        "True if the file is closed"
+        """True if the file is closed"""
         return self._closed
 
     @property
     def encoding(self):
-        "file encoding"
+        'file encoding'
         return None
 
     @property
     def errors(self):
-        "Unicode error handler"
+        """Unicode error handler"""
         return None
 
     @property
     def newlines(self):
-        "end-of-line convention used in this file"
+        """end-of-line convention used in this file"""
         return None
 
     def __init__(self, name, mode='r'):
@@ -107,11 +107,7 @@ class file(object):
 
         if mode not in ALL_MODES:
             raise ValueError(
-                (
-                    "The only supported modes are"
-                    " r(+)(b), w(+)(b) and a(+)(b),"
-                    " not %r"
-                )
+                'The only supported modes are r(+)(b), w(+)(b) and a(+)(b), not %r'
                 % mode
             )
         if name == '':
@@ -190,7 +186,7 @@ class file(object):
         return data
 
     def write(self, data):
-        """Write string str to file.
+        """Write data to the file.
 
         Note that due to buffering, flush() or close() may be needed before
         the file on disk reflects the data written.
@@ -274,7 +270,7 @@ class file(object):
         return self._position
 
     def flush(self):
-        "Flush the internal I/O buffer."
+        """Flush the internal I/O buffer."""
         if self.mode not in WRITE_MODES:
             raise IOError('Bad file descriptor')
         backend.SaveFile(self.name, self._data)
@@ -384,7 +380,7 @@ class file(object):
     softspace = property(
         _get_softspace,
         _set_softspace,
-        doc="flag indicating that a space needs to be printed; used by print",
+        doc='flag indicating that a space needs to be printed; used by print',
     )
 
     def truncate(self, size=DEFAULT):
@@ -438,7 +434,7 @@ def open(name, mode='r', encoding=None, errors=None):
 
 
 def replace_builtins():
-    "replace file and open in the builtin module"
+    """replace file and open in the builtin module"""
     if sys.version_info[0] == 2:
         builtins.file = file
     builtins.open = open
@@ -446,7 +442,7 @@ def replace_builtins():
 
 
 def restore_builtins():
-    "restore the original file and open to the builtin module"
+    """restore the original file and open to the builtin module"""
     if sys.version_info[0] == 2:
         builtins.file = original_file
     builtins.open = original_open
@@ -457,7 +453,7 @@ _store = {}
 
 
 class backend(object):
-    "Example backend."
+    """Example backend."""
 
     @staticmethod
     def CheckForFile(filename):
