@@ -49,7 +49,8 @@ endif
 install_args += --prefix="$(prefix)"
 install_args += --disable-pip-version-check
 
-PYTEST_FLAGS = $(QUIET) $(TEST_VERBOSE)
+PYTEST_FLAGS = -p no:cacheprovider
+PYTEST_FLAGS += $(QUIET) $(TEST_VERBOSE)
 
 PYTHON_DIRS = mockfs
 PYTHON_DIRS += tests
