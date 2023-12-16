@@ -1,0 +1,29 @@
+# Use "cargo install garden-tools" to install garden https://gitlab.com/garden-rs/garden
+#
+# Usage:
+#
+#   # Development Workflows
+#   garden fmt                  # Format code using "cercis".
+#   garden grow pages           # Clone mockfs.github.io to pages/.
+#   garden doc                  # Generate documentation to pages/.
+---
+garden:
+  root: "${GARDEN_CONFIG_DIR}"
+
+trees:
+  mockfs:
+    description: A simple mock filesystem for unit tests
+    path: "${GARDEN_CONFIG_DIR}"
+    url: "git@github.com:mockfs/mockfs.git"
+    remotes:
+      davvid: "git@github.com:davvid/mockfs.git"
+    commands:
+      doc: |
+        python -m sphinx -v docs pages
+      fmt: |
+        cercis --version
+        git ls-files -- '*.py' | xargs cercis "$@"
+
+  pages:
+    description: mockfs documentation hosted on mockfs.github.io
+    url: "git@github.com:mockfs/mockfs.github.io"

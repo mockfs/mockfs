@@ -1,16 +1,10 @@
 *.egg-info
 *.py[co]
-*.swp
-*~
 /env*
-/.eggs
 /build
 /config.mak
 /.coverage
 /dist
-/htmlcov
-/Meta
-/MANIFEST
+/pages
 /__pycache__
-/tags
 /.tox

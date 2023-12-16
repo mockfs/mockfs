@@ -7,7 +7,6 @@ all::
 # make V=1                      # V=1 increases verbosity
 # make test [flags=...]         # run tests; flags=-x fails fast, --ff failed first
 # make test V=2                 # run tests; V=2 increases test verbosity
-# make fmt                      # run the code formatter
 
 # Installation
 # ------------
@@ -19,14 +18,11 @@ prefix ?= $(CURDIR)/dist/mockfs
 # Commands
 # --------
 # The external commands used by this Makefile are...
-CERCIS = cercis
-GIT = git
 PIP = pip
 PYTHON ?= python
 PYTEST ?= $(PYTHON) -m pytest
 RM_FR = rm -fr
 TOX ?= tox
-XARGS = xargs
 
 # Flags and Control Variables
 # ---------------------------
@@ -72,13 +68,6 @@ test: all
 .PHONY: tox
 tox::
 	$(TOX) $(TOX_FLAGS) --parallel auto -e ${TOX_ENVS} $(flags)
-
-.PHONY: fmt
-fmt::
-	$(GIT) ls-files -- '*.py' | $(XARGS) $(CERCIS)
-
-.PHONY: all install tags test
-
 
 .PHONY: clean
 clean::
