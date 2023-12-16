@@ -1,5 +1,6 @@
 from warnings import warn
 import codecs
+import io
 import sys
 
 from .compat import builtins
@@ -7,14 +8,12 @@ from . import compat
 from . import util
 
 
-__all__ = ['file', 'open', 'replace_builtins', 'restore_builtins', 'original_open']
-
 original_open = builtins.open
 original_codecs_open = codecs.open
+original_io_open = io.open
 
 if sys.version_info[0] == 2:
     original_file = builtins.file
-    __all__.append('original_file')
 
 
 # bad for introspection?
@@ -439,6 +438,7 @@ def replace_builtins():
         builtins.file = file
     builtins.open = open
     codecs.open = open
+    io.open = open
 
 
 def restore_builtins():
@@ -447,6 +447,7 @@ def restore_builtins():
         builtins.file = original_file
     builtins.open = original_open
     codecs.open = original_codecs_open
+    io.open = original_io_open
 
 
 _store = {}
