@@ -13,7 +13,6 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
-    'sphinxtogithub',
     # https://github.com/jaraco/jaraco.packaging/issues/7
     # 'jaraco.packaging.sphinx',
 ]
