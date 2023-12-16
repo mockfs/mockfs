@@ -2,6 +2,10 @@ import os
 import sys
 
 try:
+    import furo
+except ImportError:
+    furo = None
+try:
     import rst.linker as rst_linker
 except ImportError:
     rst_linker = None
@@ -18,7 +22,11 @@ extensions = [
 ]
 
 master_doc = 'index'
-html_theme = 'default'
+
+if furo:
+    html_theme = 'furo'
+else:
+    html_theme = 'agogo'
 
 # {package_url} is provided py jaraco.packaging.sphinx when available
 # for use in the rst.linker configuration. We expand the value manually for now.

@@ -10,3 +10,4 @@ pytest-checkdocs
 jaraco.packaging >= 9
 rst.linker >= 1.9
 Sphinx
+furo
