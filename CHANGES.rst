@@ -1,5 +1,6 @@
 v2.0.0
 ======
+    * The build system is now Python3-only and has been modernized for PEP-517/518.
     * Code is now formatted using `cercis`.
 
 v1.1.3

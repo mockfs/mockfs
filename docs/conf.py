@@ -1,15 +1,37 @@
 import os
 import sys
 
+try:
+    import rst.linker as rst_linker
+except ImportError:
+    rst_linker = None
+
 sys.path.insert(1, os.path.dirname(os.path.dirname(__file__)))
 
-extensions = ['sphinx.ext.autodoc', 'jaraco.packaging.sphinx', 'rst.linker']
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
+    'sphinx.ext.todo',
+    'sphinx.ext.coverage',
+    'sphinxtogithub',
+    # https://github.com/jaraco/jaraco.packaging/issues/7
+    # 'jaraco.packaging.sphinx',
+]
 
-master_doc = "index"
+master_doc = 'index'
+html_theme = 'default'
+
+# {package_url} is provided py jaraco.packaging.sphinx when available
+# for use in the rst.linker configuration. We expand the value manually for now.
+package_url = 'https://github.com/mockfs/mockfs'
+
+# Link dates and other references in the changelog
+if rst_linker is not None:
+    extensions += ['rst.linker']
 
 link_files = {
     '../CHANGES.rst': dict(
-        using=dict(GH='https://github.com'),
+        using=dict(GH='https://github.com', package_url=package_url),
         replace=[
             dict(
                 pattern=r'(Issue #|\B#)(?P<issue>\d+)',
@@ -30,11 +52,10 @@ link_files = {
 # Be strict about any broken references
 nitpicky = True
 
-# Include Python intersphinx mapping to prevent failures
-# jaraco/skeleton#51
 extensions += ['sphinx.ext.intersphinx']
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
+    'sphinx': ('https://www.sphinx-doc.org/en/stable/', None),
 }
 
 # Preserve authored syntax for defaults

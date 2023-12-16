@@ -1,8 +1,12 @@
-pytest
+## Code style
 cercis
+
+## Testing
+pytest>=3.6
 pytest-cov
-pytest-checkdocs; python_version > '3.0'
-pytest-black-multipy
-sphinx
-jaraco.packaging
-rst.linker
+pytest-checkdocs
+
+## Documentation
+jaraco.packaging >= 9
+rst.linker >= 1.9
+Sphinx

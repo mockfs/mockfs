@@ -1,56 +1,70 @@
+# The default target of this Makefile is...
+.PHONY: all
+all::
+
+# Development
+# -----------
+# make V=1                      # V=1 increases verbosity
+# make test [flags=...]         # run tests; flags=-x fails fast, --ff failed first
+# make test V=2                 # run tests; V=2 increases test verbosity
+# make fmt                      # run the code formatter
+
+# Installation
+# ------------
+# "prefix" (and, optionally, "DESTDIR") can be passed on the command-line when installing, e.g.
+#     make DESTDIR=/tmp/stage prefix=/usr install
+prefix ?= $(CURDIR)/dist/mockfs
+# DESTDIR =
+
+# Commands
+# --------
+# The external commands used by this Makefile are...
 CERCIS = cercis
-CTAGS ?= ctags
 GIT = git
+PIP = pip
 PYTHON ?= python
 PYTEST ?= $(PYTHON) -m pytest
-RSYNC ?= rsync -r --stats --delete --exclude=.gitignore --exclude=.git
-RM ?= rm
 TOX ?= tox
 XARGS = xargs
 
-# Define MOCKFS_PREFIX in the environment to override the default prefix,
-# or supply "DESTDIR" and "prefix" on the command-line, e.g.
-#     make DESTDIR=/tmp/DESTDIR prefix=/usr install
+# Flags and Control Variables
+# ---------------------------
+ifdef V
+    VERBOSE = --verbose
+    ifeq ($(V),2)
+        TEST_VERBOSE = --verbose
+        VERBOSE_SHORT = -vv
+    else
+        VERBOSE_SHORT = -v
+    endif
+else
+    QUIET = --quiet
+endif
 
-MOCKFS_PREFIX ?= $(CURDIR)/mockfs-$(version)
-
-prefix ?= $(MOCKFS_PREFIX)
-libdir ?= $(shell $(PYTHON) -c 'import os, distutils.sysconfig as sc; print(os.path.basename(sc.get_config_var("LIBDIR")))')
-pythonver ?= $(shell $(PYTHON) -c 'import distutils.sysconfig as sc; print(sc.get_python_version())')
-pythonsite ?= $(prefix)/$(libdir)/python$(pythonver)/site-packages
-docdir ?= $(prefix)/share/doc/mockfs/html
-webdir ?= $(docdir)
-version ?= $(shell grep __version__ mockfs/__init__.py | \
-		awk '{print $$3}' | sed -e "s,',,g")
-
-SETUP_INSTALL_ARGS ?= --single-version-externally-managed --record MANIFEST
+install_args =
 ifdef DESTDIR
-    SETUP_INSTALL_ARGS += --root=$(DESTDIR)
+	install_args += --root="$(DESTDIR)"
+	export DESTDIR
 endif
-ifndef mac_pkg
-    SETUP_INSTALL_ARGS += --prefix=$(prefix)
-    SETUP_INSTALL_ARGS += --install-lib=$(pythonsite)
-endif
+install_args += --prefix="$(prefix)"
+install_args += --disable-pip-version-check
 
+PYTEST_FLAGS = $(QUIET) $(TEST_VERBOSE)
+
+PYTHON_DIRS = mockfs
 
 # Site configuration goes in untracked config.mak
 -include config.mak
 
-all:: mockfs/*.py setup.py
-	@echo mockfs v$(version)
-	$(PYTHON) setup.py build
-
-install: all
-	$(PYTHON) setup.py install $(SETUP_INSTALL_ARGS)
-
-tags:
-	find mockfs -name '*.py' -print0 | xargs -0 $(CTAGS)
+.PHONY: install
+install:: all
+	$(PIP) $(QUIET) $(VERBOSE) install $(install_args) .
 
 test: all
-	$(PYTEST)
+	$(PYTEST) $(PYTEST_FLAGS) $(flags) $(PYTHON_DIRS)
 
 tox:
-	$(TOX) --skip-missing-interpreters -e 'py{27,36,37,38}'
+	$(TOX) --skip-missing-interpreters -e 'py{36,37,38,39,310,311}'
 
 .PHONY: fmt
 fmt::
