@@ -56,6 +56,9 @@ PYTEST_FLAGS += $(QUIET) $(TEST_VERBOSE)
 PYTHON_DIRS = mockfs
 PYTHON_DIRS += tests
 
+TOX_FLAGS = $(VERBOSE_SHORT) --develop --skip-missing-interpreters
+TOX_ENVS ?= py36,py37,py38,py39,py310,py311,py312
+
 # Site configuration goes in untracked config.mak
 -include config.mak
 
@@ -66,8 +69,9 @@ install:: all
 test: all
 	$(PYTEST) $(PYTEST_FLAGS) $(flags) $(PYTHON_DIRS)
 
-tox:
-	$(TOX) --skip-missing-interpreters -e 'py{36,37,38,39,310,311}'
+.PHONY: tox
+tox::
+	$(TOX) $(TOX_FLAGS) --parallel auto -e ${TOX_ENVS} $(flags)
 
 .PHONY: fmt
 fmt::
