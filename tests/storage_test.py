@@ -80,11 +80,5 @@ class StorageTestCase(unittest.TestCase):
         self.assertRaises(IOError, open, '/does/not/exist', 'w')
 
 
-def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(StorageTestCase))
-    return suite
-
-
 if __name__ == '__main__':
     unittest.main()

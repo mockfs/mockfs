@@ -49,11 +49,5 @@ class MockFSUtilTestCase(unittest.TestCase):
         self.assertEqual(dst['a']['b'], 'src')
 
 
-def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(MockFSUtilTestCase))
-    return suite
-
-
 if __name__ == '__main__':
     unittest.main()

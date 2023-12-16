@@ -289,11 +289,5 @@ class MockFSTestCase(unittest.TestCase):
         self.assertRaises(OSError, os.makedirs, '/new/directory')
 
 
-def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(MockFSTestCase))
-    return suite
-
-
 if __name__ == '__main__':
     unittest.main()
