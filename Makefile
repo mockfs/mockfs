@@ -24,6 +24,7 @@ GIT = git
 PIP = pip
 PYTHON ?= python
 PYTEST ?= $(PYTHON) -m pytest
+RM_FR = rm -fr
 TOX ?= tox
 XARGS = xargs
 
@@ -73,3 +74,8 @@ fmt::
 	$(GIT) ls-files -- '*.py' | $(XARGS) $(CERCIS)
 
 .PHONY: all install tags test
+
+
+.PHONY: clean
+clean::
+	$(RM_FR) build .coverage dist .mockfs.egg-info
