@@ -1,10 +1,17 @@
-repos:
-- repo: https://github.com/psf/black
-  rev: 19.10b0
-  hooks:
-  - id: black
+ci:
+  autoupdate_schedule: monthly
 
-- repo: https://github.com/asottile/blacken-docs
-  rev: v1.4.0
-  hooks:
-  - id: blacken-docs
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks.git
+    rev: v4.5.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/jsh9/cercis
+    rev: 0.2.5
+    hooks:
+      - id: cercis
+        args:
+          - --line-length=88
+          - --function-definition-extra-indent=False

@@ -2,7 +2,8 @@
 requires = ["setuptools>=42", "wheel", "setuptools_scm[toml]>=3.4.1"]
 build-backend = "setuptools.build_meta"
 
-[tool.black]
-skip-string-normalization = true
+[tool.cercis]
+function-definition-extra-indent = false
+line-length = 88
 
 [tool.setuptools_scm]

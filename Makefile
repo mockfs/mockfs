@@ -1,10 +1,12 @@
-BLACK ?= black
+CERCIS = cercis
 CTAGS ?= ctags
+GIT = git
 PYTHON ?= python
 PYTEST ?= $(PYTHON) -m pytest
 RSYNC ?= rsync -r --stats --delete --exclude=.gitignore --exclude=.git
 RM ?= rm
 TOX ?= tox
+XARGS = xargs
 
 # Define MOCKFS_PREFIX in the environment to override the default prefix,
 # or supply "DESTDIR" and "prefix" on the command-line, e.g.
@@ -30,7 +32,6 @@ ifndef mac_pkg
     SETUP_INSTALL_ARGS += --install-lib=$(pythonsite)
 endif
 
-BLACK_ENABLED := $(shell sh -c 'type black >/dev/null 2>&1 && echo 1 || echo 0')
 
 # Site configuration goes in untracked config.mak
 -include config.mak
@@ -51,10 +52,8 @@ test: all
 tox:
 	$(TOX) --skip-missing-interpreters -e 'py{27,36,37,38}'
 
-format::
-ifeq ($(BLACK_ENABLED),1)
-	$(SILENT)git ls-files -z -- '*.py' \
-	| xargs -0 black --skip-string-normalization --target-version py27
-endif
+.PHONY: fmt
+fmt::
+	$(GIT) ls-files -- '*.py' | $(XARGS) $(CERCIS)
 
 .PHONY: all install tags test

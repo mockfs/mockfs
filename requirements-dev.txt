@@ -1,5 +1,5 @@
-black; python_version > '3.0'
 pytest
+cercis
 pytest-cov
 pytest-checkdocs; python_version > '3.0'
 pytest-black-multipy

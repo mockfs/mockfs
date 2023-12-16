@@ -1,3 +1,7 @@
+v2.0.0
+======
+    * Code is now formatted using `cercis`.
+
 v1.1.3
 ======
     * `replace_builtins()` now patches `codecs.open` as well.
