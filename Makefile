@@ -52,6 +52,7 @@ install_args += --disable-pip-version-check
 PYTEST_FLAGS = $(QUIET) $(TEST_VERBOSE)
 
 PYTHON_DIRS = mockfs
+PYTHON_DIRS += tests
 
 # Site configuration goes in untracked config.mak
 -include config.mak
