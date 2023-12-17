@@ -21,8 +21,8 @@ def replace_builtins(entries=None):
     >>> import mockfs
     >>> fs = mockfs.replace_builtins()
     >>> fs.add_entries({
-    ...         '/bin/sh': 'contents',
-    ...         '/bin/ls': 'contents',
+    ...     '/bin/sh': 'contents',
+    ...     '/bin/ls': 'contents',
     ... })
     >>> assert(os.listdir('/bin') == ['ls', 'sh'])
     >>> mockfs.restore_builtins()
