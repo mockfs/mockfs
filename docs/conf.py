@@ -21,6 +21,7 @@ extensions = [
     # 'jaraco.packaging.sphinx',
 ]
 
+project = 'mockfs'
 master_doc = 'index'
 
 if furo:
