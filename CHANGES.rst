@@ -1,5 +1,6 @@
 v2.0.0
 ======
+    * `mockfs.MockFS` can now be used as a context manager.
     * The build system is now Python3-only and has been modernized for PEP-517/518.
     * `replace_builtins()` now patches `io.open` as well.
     * Code is now formatted using `cercis`.

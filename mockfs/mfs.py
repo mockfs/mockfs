@@ -9,8 +9,8 @@ import shutil
 import sys
 
 from . import compat
+from . import storage
 from . import util
-
 
 # Python functions to replace
 builtins = {
@@ -80,16 +80,27 @@ class MockFS(object):
 
     """
 
-    def __init__(self):
+    def __init__(self, entries=None):
         self.cwd = Cwd(self)
         self.backend = StorageBackend(self)
 
         self._entries = {}
+        if entries:
+            self.add_entries(entries)
 
     def add_entries(self, entries):
         """Add new entries to mockfs."""
         new_entries = util.build_nested_dict(entries)
         util.merge_dicts(new_entries, self._entries)
+
+    def __enter__(self):
+        """Replace builtin functions when the context manager scope begins"""
+        replace_builtins(context=self)
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        """Restore builtin functions when the context manager scope ends"""
+        restore_builtins()
 
     def exists(self, path):
         """
@@ -433,3 +444,67 @@ class Cwd(object):
 
     def getcwdu(self):
         return self._cwd
+
+
+def replace_builtins(entries=None, context=None):
+    """Replace builtin functions with mockfs.
+
+    :param entries: Dictionary mapping paths to content
+    :returns: Newly installed :class:`mockfs.mfs.MockFS` instance.
+
+    >>> import os
+    >>> import mockfs
+    >>> fs = mockfs.replace_builtins()
+    >>> fs.add_entries({
+    ...     '/bin/sh': 'contents',
+    ...     '/bin/ls': 'contents',
+    ... })
+    >>> assert(os.listdir('/bin') == ['ls', 'sh'])
+    >>> mockfs.restore_builtins()
+
+    """
+    if context is None:
+        mfs = MockFS(entries=entries)
+    else:
+        mfs = context
+        if entries:
+            mfs.add_entries(entries)
+
+    # Install functions
+    glob.glob = mfs.glob
+    os.chdir = mfs.cwd.chdir
+    os.getcwd = mfs.cwd.getcwd
+    os.listdir = mfs.listdir
+    os.makedirs = mfs.makedirs
+    os.path.abspath = mfs.abspath
+    os.path.exists = mfs.exists
+    os.path.getsize = mfs.getsize
+    os.path.islink = mfs.islink
+    os.path.isdir = mfs.isdir
+    os.path.isfile = mfs.isfile
+    os.remove = mfs.remove
+    os.rmdir = mfs.rmdir
+    os.unlink = mfs.remove
+    os.walk = mfs.walk
+    shutil.rmtree = mfs.rmtree
+    if compat.PY2:
+        os.getcwdu = mfs.cwd.getcwdu
+
+    storage.backend = mfs.backend
+    storage.replace_builtins()
+
+    return mfs
+
+
+def restore_builtins():
+    """Restore the original builtin functions."""
+    for k, v in builtins.items():
+        mod, func = k.rsplit('.', 1)  # 'os.path.isdir' -> ('os.path', 'isdir')
+        name_elts = mod.split('.')
+        top = name_elts.pop(0)
+        module = globals()[top]
+        for elt in name_elts:
+            module = getattr(module, elt)
+        setattr(module, func, v)
+
+    storage.restore_builtins()

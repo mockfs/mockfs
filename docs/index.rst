@@ -21,7 +21,23 @@ Example Unit Test
 
     import mockfs
 
+
+    def test_context_manager():
+        """The MockFS class can be used as context manager"""
+        with mockfs.MockFS(entries={'/tmp/does/not/exist': 'mockfs'}) as mfs:
+            assert os.path.exists('/tmp/does/not/exist')
+            with open('/tmp/does/not/exist', 'r', encoding='utf-8') as fh:
+                content = fh.read()
+            assert content == 'mockfs'
+            mfs.add_entries({'/tmp/does/not/exist-2': 'mockfs'})
+            assert os.path.exists('/tmp/does/not/exist-2')
+        # Context manager scope ends: everything is back to normal now.
+        assert not os.path.exists('/tmp/does/not/exist')
+        assert not os.path.exists('/tmp/does/not/exist-2')
+
+
     class ExampleTestCase(unittest.TestCase):
+        """The mockfs module can be used in setUp() and tearDown()"""
         def setUp(self):
             self.mfs = mockfs.replace_builtins()
             self.mfs.add_entries({'/usr/bin/mockfs-magic': 'magic'})
@@ -37,6 +53,7 @@ Example Unit Test
             content = fh.read()
             fh.close()
             self.assertEqual(data, 'magic')
+
 
 Currently supported functions:
 

@@ -289,5 +289,19 @@ class MockFSTestCase(unittest.TestCase):
         self.assertRaises(OSError, os.makedirs, '/new/directory')
 
 
+def test_mockfs_context_manager():
+    """Ensure that the context manager works as advertised"""
+    with mockfs.MockFS(entries={'/tmp/does/not/exist': 'mockfs'}) as mfs:
+        assert os.path.exists('/tmp/does/not/exist')
+        with open('/tmp/does/not/exist', 'r', encoding='utf-8') as fh:
+            content = fh.read()
+        assert content == 'mockfs'
+        mfs.add_entries({'/tmp/does/not/exist-2': 'mockfs'})
+        assert os.path.exists('/tmp/does/not/exist-2')
+    # Context manager scope ends: everything is back to normal now.
+    assert not os.path.exists('/tmp/does/not/exist')
+    assert not os.path.exists('/tmp/does/not/exist-2')
+
+
 if __name__ == '__main__':
     unittest.main()
