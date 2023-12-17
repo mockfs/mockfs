@@ -19,7 +19,7 @@ trees:
       davvid: "git@github.com:davvid/mockfs.git"
     commands:
       doc: |
-        python -m sphinx -v docs pages
+        python -m sphinx "$@" docs pages
       fmt: |
         cercis --version
         git ls-files -- '*.py' | xargs cercis "$@"
