@@ -2,12 +2,16 @@
 #
 # Usage:
 #   garden fmt                  # Format code using "cercis".
-#   garden tox                  # Run tests using "tox"
 #   garden grow pages           # Clone mockfs.github.io to pages/.
 #   garden doc                  # Generate documentation to pages/.
+#   garden test                 # Run tests directly using "pytest"
+#   garden tox                  # Run tests using "tox"
 ---
 garden:
   root: "${GARDEN_CONFIG_DIR}"
+
+variables:
+  tox_envs: "py36,py37,py38,py39,py310,py311,py312"
 
 trees:
   mockfs:
@@ -16,18 +20,18 @@ trees:
     url: "git@github.com:mockfs/mockfs.git"
     remotes:
       davvid: "git@github.com:davvid/mockfs.git"
-    variables:
-      tox_envs: "py36,py37,py38,py39,py310,py311,py312"
     commands:
       clean: |
         rm -fr build .coverage dist *.egg-info
       doc: |
-        python -m sphinx "$@" docs pages
+        python3 -m sphinx "$@" docs pages
       fmt: |
         cercis --version
         git ls-files -- '*.py' | xargs cercis "$@"
+      test: |
+        python3 -m pytest -p no:cacheprovider --doctest-modules "$@" mockfs tests
       tox: |
-        tox --develop --skip-missing-interpreters --parallel auto -e "${tox_envs}" "$@"
+        tox run --develop --skip-missing-interpreters -e ${tox_envs} "$@"
 
   pages:
     description: mockfs documentation hosted on mockfs.github.io
