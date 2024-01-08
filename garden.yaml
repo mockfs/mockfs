@@ -19,8 +19,7 @@ trees:
       davvid: "git@github.com:davvid/mockfs.git"
     variables:
       DESTDIR: ""
-      prefix: "${TREE_PATH}/dist/mockfs"
-      tox_envs: "py36,py37,py38,py39,py310,py311,py312"
+      prefix: "${TREE_PATH}/dist/${TREE_NAME}"
     commands:
       clean: |
         rm -fr build .coverage dist ${TREE_NAME}.egg-info
@@ -38,7 +37,7 @@ trees:
       test: |
         python3 -m pytest -p no:cacheprovider --doctest-modules "$@" mockfs tests
       tox: |
-        tox run --develop --skip-missing-interpreters -e ${tox_envs} "$@"
+        tox run --develop --skip-missing-interpreters "$@"
 
   pages:
     description: mockfs documentation hosted on mockfs.github.io

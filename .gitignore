@@ -5,6 +5,7 @@
 /config.mak
 /.coverage
 /dist
+/htmlcov
 /pages
 /__pycache__
 /.tox
