@@ -1,5 +1,6 @@
 ## Build
 build
+wheel
 
 ## Code style
 cercis
