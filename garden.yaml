@@ -19,6 +19,8 @@ trees:
     variables:
       tox_envs: "py36,py37,py38,py39,py310,py311,py312"
     commands:
+      clean: |
+        rm -fr build .coverage dist *.egg-info
       doc: |
         python -m sphinx "$@" docs pages
       fmt: |

@@ -21,7 +21,6 @@ prefix ?= $(CURDIR)/dist/mockfs
 PIP = pip
 PYTHON ?= python
 PYTEST ?= $(PYTHON) -m pytest
-RM_FR = rm -fr
 
 # Flags and Control Variables
 # ---------------------------
@@ -60,7 +59,3 @@ install:: all
 
 test: all
 	$(PYTEST) $(PYTEST_FLAGS) $(flags) $(PYTHON_DIRS)
-
-.PHONY: clean
-clean::
-	$(RM_FR) build .coverage dist .mockfs.egg-info
