@@ -22,7 +22,6 @@ PIP = pip
 PYTHON ?= python
 PYTEST ?= $(PYTHON) -m pytest
 RM_FR = rm -fr
-TOX ?= tox
 
 # Flags and Control Variables
 # ---------------------------
@@ -52,9 +51,6 @@ PYTEST_FLAGS += $(QUIET) $(TEST_VERBOSE)
 PYTHON_DIRS = mockfs
 PYTHON_DIRS += tests
 
-TOX_FLAGS = $(VERBOSE_SHORT) --develop --skip-missing-interpreters
-TOX_ENVS ?= py36,py37,py38,py39,py310,py311,py312
-
 # Site configuration goes in untracked config.mak
 -include config.mak
 
@@ -64,10 +60,6 @@ install:: all
 
 test: all
 	$(PYTEST) $(PYTEST_FLAGS) $(flags) $(PYTHON_DIRS)
-
-.PHONY: tox
-tox::
-	$(TOX) $(TOX_FLAGS) --parallel auto -e ${TOX_ENVS} $(flags)
 
 .PHONY: clean
 clean::
