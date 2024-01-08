@@ -10,9 +10,6 @@
 garden:
   root: "${GARDEN_CONFIG_DIR}"
 
-variables:
-  tox_envs: "py36,py37,py38,py39,py310,py311,py312"
-
 trees:
   mockfs:
     description: A simple mock filesystem for unit tests
@@ -20,14 +17,24 @@ trees:
     url: "git@github.com:mockfs/mockfs.git"
     remotes:
       davvid: "git@github.com:davvid/mockfs.git"
+    variables:
+      DESTDIR: ""
+      prefix: "${TREE_PATH}/dist/mockfs"
+      tox_envs: "py36,py37,py38,py39,py310,py311,py312"
     commands:
       clean: |
-        rm -fr build .coverage dist *.egg-info
+        rm -fr build .coverage dist ${TREE_NAME}.egg-info
       doc: |
         python3 -m sphinx "$@" docs pages
       fmt: |
         cercis --version
         git ls-files -- '*.py' | xargs cercis "$@"
+      install: |
+        if test -n "${DESTDIR}"
+        then
+            install_args="--root=${DESTDIR}"
+        fi
+        pip install --disable-pip-version-check --prefix="${prefix}" $install_args "$@" .
       test: |
         python3 -m pytest -p no:cacheprovider --doctest-modules "$@" mockfs tests
       tox: |
