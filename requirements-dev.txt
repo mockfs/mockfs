@@ -1,5 +1,8 @@
 ## Build
 build
+
+## Deployment
+twine
 wheel
 
 ## Code style
