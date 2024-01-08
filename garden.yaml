@@ -26,6 +26,10 @@ trees:
       doc: |
         python3 -m sphinx "$@" docs pages
       fmt: |
+        if test -f ./env3/bin/activate
+        then
+          source ./env3/bin/activate
+        fi
         cercis --version
         git ls-files -- '*.py' | xargs cercis "$@"
       install: |
@@ -34,6 +38,9 @@ trees:
             install_args="--root=${DESTDIR}"
         fi
         pip install --disable-pip-version-check --prefix="${prefix}" $install_args "$@" .
+      setup: |
+        python3 -m venv --system-site-packages env3
+        ./env3/bin/pip install --requirement=requirements-dev.txt
       test: |
         python3 -m pytest -p no:cacheprovider --doctest-modules "$@" mockfs tests
       tox: |
