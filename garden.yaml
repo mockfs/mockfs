@@ -1,11 +1,12 @@
 # Use "cargo install garden-tools" to install garden https://gitlab.com/garden-rs/garden
 #
 # Usage:
-#   garden fmt                  # Format code using "cercis".
 #   garden grow pages           # Clone mockfs.github.io to pages/.
 #   garden doc                  # Generate documentation to pages/.
-#   garden test                 # Run tests directly using "pytest"
-#   garden tox                  # Run tests using "tox"
+#   garden test                 # Run tests directly using "pytest".
+#   garden tox                  # Run tests using "tox".
+#   garden setup                # Create an "env3" virtualenv for development.
+#   garden fmt                  # Format code using "cercis".
 ---
 garden:
   root: "${GARDEN_CONFIG_DIR}"
@@ -40,7 +41,7 @@ trees:
         pip install --disable-pip-version-check --prefix="${prefix}" $install_args "$@" .
       setup: |
         python3 -m venv --system-site-packages env3
-        ./env3/bin/pip install --requirement=requirements-dev.txt
+        ./env3/bin/pip install --editable '.[testing,dev,docs,release]'
       test: |
         python3 -m pytest -p no:cacheprovider --doctest-modules "$@" mockfs tests
       tox: |
