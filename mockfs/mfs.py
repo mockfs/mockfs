@@ -219,7 +219,7 @@ class MockFS(object):
                 files = []
                 if dirent:
                     for e in dirent:
-                        if type(dirent[e]) is dict:
+                        if isinstance(dirent[e], dict):
                             dirs.append(e)
                         else:
                             files.append(e)

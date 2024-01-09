@@ -14,7 +14,7 @@ def is_file(value):
 
 
 def is_dir(entry):
-    return type(entry) is dict
+    return isinstance(entry, dict)
 
 
 def sanitize(path):
@@ -44,10 +44,10 @@ def merge_dicts(src, dst):
         if k not in dst:
             dst[k] = v
             continue
-        if type(dst[k]) is dict:
+        if isinstance(dst[k], dict):
             dst[k] = merge_dicts(v, dst[k])
             continue
-        if type(dst[k]) is list and type(v) is list:
+        if isinstance(dst[k], list) and isinstance(v, list):
             dst[k].extend(v)
             continue
         dst[k] = v

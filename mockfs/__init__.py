@@ -1,12 +1,6 @@
-import os
-import glob
-import shutil
-
 from .mfs import MockFS
-from .mfs import builtins
 from .mfs import replace_builtins
 from .mfs import restore_builtins
-from . import compat
-from . import storage
 
+__all__ = ('MockFS', 'replace_builtins', 'restore_builtins')
 __version__ = '2.0.0'
