@@ -17,8 +17,6 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
-    # https://github.com/jaraco/jaraco.packaging/issues/7
-    # 'jaraco.packaging.sphinx',
 ]
 
 project = 'mockfs'
@@ -29,8 +27,8 @@ if furo:
 else:
     html_theme = 'agogo'
 
-# {package_url} is provided py jaraco.packaging.sphinx when available
-# for use in the rst.linker configuration. We expand the value manually for now.
+# {package_url} can be provided py jaraco.packaging.sphinx but we
+# expand the value manually to avoid the dependency.
 package_url = 'https://github.com/mockfs/mockfs'
 
 # Link dates and other references in the changelog
@@ -60,11 +58,15 @@ link_files = {
 # Be strict about any broken references
 nitpicky = True
 
-extensions += ['sphinx.ext.intersphinx']
-intersphinx_mapping = {
-    'python': ('https://docs.python.org/3', None),
-    'sphinx': ('https://www.sphinx-doc.org/en/stable/', None),
-}
+# export MOCKFS_SPHINX_INTERSPHINX_ENABLED=0 in the environment to disable
+# the "sphinx.ext.intersphinx" sphinx extension.
+intersphinx_enabled = os.environ.get('MOCKFS_SPHINX_INTERSPHINX_ENABLED', '1')
+if intersphinx_enabled == '1':
+    extensions += ['sphinx.ext.intersphinx']
+    intersphinx_mapping = {
+        'python': ('https://docs.python.org/3', None),
+        'sphinx': ('https://www.sphinx-doc.org/en/stable/', None),
+    }
 
 # Preserve authored syntax for defaults
 autodoc_preserve_defaults = True
