@@ -5,7 +5,7 @@
 #   garden doc                  # Generate documentation to pages/.
 #   garden test                 # Run tests directly using "pytest".
 #   garden tox                  # Run tests using "tox".
-#   garden setup                # Create an "env3" virtualenv for development.
+#   garden dev                  # Create an "env3" virtualenv for development.
 #   garden fmt                  # Format code using "cercis".
 trees:
   mockfs:
@@ -35,9 +35,9 @@ trees:
             install_args="--root=${DESTDIR}"
         fi
         pip install --disable-pip-version-check --prefix="${prefix}" $install_args "$@" .
-      setup: |
+      dev: |
         python3 -m venv --system-site-packages env3
-        ./env3/bin/pip install --editable '.[testing,dev,docs,release]'
+        ./env3/bin/pip install --editable '.[build,dev,docs,testing]'
       test: |
         python3 -m pytest -p no:cacheprovider --doctest-modules "$@" mockfs tests
       tox: |
