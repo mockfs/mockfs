@@ -41,7 +41,7 @@ trees:
       test: |
         python3 -m pytest -p no:cacheprovider --doctest-modules "$@" mockfs tests
       tox: |
-        tox run "$@"
+        tox run-parallel --parallel-live "$@"
 
   pages:
     description: mockfs documentation hosted on mockfs.github.io
