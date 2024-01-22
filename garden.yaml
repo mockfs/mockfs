@@ -7,10 +7,6 @@
 #   garden tox                  # Run tests using "tox".
 #   garden setup                # Create an "env3" virtualenv for development.
 #   garden fmt                  # Format code using "cercis".
----
-garden:
-  root: "${GARDEN_CONFIG_DIR}"
-
 trees:
   mockfs:
     description: A simple mock filesystem for unit tests
