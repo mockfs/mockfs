@@ -4,14 +4,14 @@ authors = [
     {name = "David Aguilar", email = "davvid@gmail.com"}
 ]
 classifiers = [
-	"Development Status :: 6 - Mature",
-	"Intended Audience :: Developers",
-	"License :: OSI Approved :: MIT License",
-	"Programming Language :: Python :: 3",
-	"Topic :: Software Development :: Libraries :: Python Modules",
-	"Topic :: Software Development :: Testing",
-	"Topic :: Software Development :: Testing :: Mocking",
-	"Topic :: Software Development :: Testing :: Unit",
+    "Development Status :: 6 - Mature",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Testing :: Mocking",
+    "Topic :: Software Development :: Testing :: Unit",
 ]
 description = "A simple mock filesystem for unit tests"
 dynamic = ["dependencies", "optional-dependencies", "version"]
