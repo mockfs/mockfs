@@ -26,5 +26,5 @@ mockfs -- A simple mock filesystem for unit tests
 `mockfs` makes it possible to test filesystem-dependent code by
 replacing functions from the `os` and `glob` modules.
 
-* [Documentation](https://mockfs.readthedocs.org)
-* [Source](https://github.com/mockfs/mockfs)
+* `Documentation <https://mockfs.readthedocs.org>`_
+* `Source <https://github.com/mockfs/mockfs>`_
