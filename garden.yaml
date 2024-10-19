@@ -18,6 +18,7 @@ trees:
       clean: |
         rm -fr build .coverage dist ${TREE_NAME}.egg-info
       doc: |
+        ${activate}
         python3 -m sphinx "$@" docs pages
       fmt: |
         if test -f ./${env_dir}/bin/activate
