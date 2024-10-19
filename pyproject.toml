@@ -48,6 +48,7 @@ docs = [
 ]
 dev = [
     "cercis",
+    "isort",
 ]
 build = [
     "build",

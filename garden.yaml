@@ -31,7 +31,8 @@ trees:
           source ./${env_dir}/bin/activate
         fi
         cercis --version
-        git ls-files -- '*.py' | xargs cercis "$@"
+        cercis mockfs tests "$@"
+        isort --profile=black "$@" mockfs tests
       install: |
         ${activate}
         if test -n "${DESTDIR}"
