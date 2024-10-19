@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools >= 56", "setuptools_scm[toml] >= 3.4.1"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "mockfs"
 authors = [
@@ -14,13 +18,44 @@ classifiers = [
     "Topic :: Software Development :: Testing :: Unit",
 ]
 description = "A simple mock filesystem for unit tests"
-dynamic = ["dependencies", "optional-dependencies", "version"]
-license = {file = "LICENSE"}
-readme = "README.rst"
+dependencies = []
+dynamic = ["version"]
 
-[build-system]
-requires = ["setuptools>=56", "setuptools_scm[toml]>=3.4.1"]
-build-backend = "setuptools.build_meta"
+[project.readme]
+file = "README.rst"
+content-type = "text/x-rst"
+
+[project.urls]
+Documentation = "https://mockfs.github.io/"
+Homepage = "https://mockfs.github.io/"
+Source = "https://github.com/mockfs/mockfs"
+
+[project.optional-dependencies]
+cov = [
+    "pytest-cov",
+]
+testing = [
+    "pytest >= 6.0, != 8.1.*",
+    "pytest-checkdocs >= 2.4",
+    "pytest-enabler >= 2.2",
+    "pytest-ruff",
+]
+docs = [
+    "sphinx",
+    "jaraco.packaging >= 9",
+    "rst.linker >= 1.9",
+    "furo",
+]
+dev = [
+    "cercis",
+]
+build = [
+    "build",
+    "setuptools >= 56",
+    "setuptools_scm[toml] >= 3.4.1",
+    "twine",
+    "wheel",
+]
 
 [tool.cercis]
 function-definition-extra-indent = false
@@ -28,6 +63,13 @@ line-length = 88
 
 [tool.pytest-enabler.ruff]
 addopts = "--ruff"
+
+[tool.setuptools]
+packages = [
+    "mockfs",
+]
+include-package-data = true
+license-files = ["LICENSE"]
 
 [tool.setuptools_scm]
 fallback_version = "2.0.0"
