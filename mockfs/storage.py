@@ -1,12 +1,10 @@
-from warnings import warn
 import codecs
 import io
 import sys
+from warnings import warn
 
+from . import compat, util
 from .compat import builtins
-from . import compat
-from . import util
-
 
 original_open = builtins.open
 original_codecs_open = codecs.open

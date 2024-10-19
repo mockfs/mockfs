@@ -1,7 +1,6 @@
-import unittest
-
 # subjects under test
 import os
+import unittest
 
 import mockfs
 

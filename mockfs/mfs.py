@@ -8,9 +8,7 @@ import os
 import shutil
 import sys
 
-from . import compat
-from . import storage
-from . import util
+from . import compat, storage, util
 
 # Python functions to replace
 builtins = {

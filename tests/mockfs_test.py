@@ -1,9 +1,8 @@
-import unittest
-
 # subjects under test
 import glob
 import os
 import shutil
+import unittest
 
 import mockfs
 from mockfs import compat

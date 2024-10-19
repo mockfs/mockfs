@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, unicode_literals
-import sys
 
+import sys
 
 PY2 = sys.version_info[0] == 2
 if PY2:
