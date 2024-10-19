@@ -17,6 +17,11 @@ trees:
     commands:
       clean: |
         rm -fr build .coverage dist ${TREE_NAME}.egg-info
+      check>:
+        - test
+        - check/fmt
+        - doc
+      check/fmt: "garden fmt ${GARDEN_CMD_VERBOSE} -- --check"
       doc: |
         ${activate}
         python3 -m sphinx "$@" docs pages
