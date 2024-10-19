@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mockfs"
 authors = [
-    {name = "David Aguilar", email = "davvid@gmail.com"}
+    {name = "David Aguilar", email = "davvid+mockfs@gmail.com"}
 ]
 classifiers = [
     "Development Status :: 6 - Mature",
@@ -26,7 +26,7 @@ file = "README.rst"
 content-type = "text/x-rst"
 
 [project.urls]
-Documentation = "https://mockfs.github.io/"
+Documentation = "https://mockfs.readthedocs.org/"
 Homepage = "https://mockfs.github.io/"
 Source = "https://github.com/mockfs/mockfs"
 
