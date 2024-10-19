@@ -1,3 +1,10 @@
+v2.0.1
+======
+    * ``setup.cfg`` was removed and replaced by ``pyproject.toml``.
+    * Documentation is now available at
+      `mockfs on readthedocs <https://mockfs.readthedocs.org>`_ in addition to the
+      github-hosted pages site.
+
 v2.0.0
 ======
     * `mockfs.MockFS` can now be used as a context manager.
