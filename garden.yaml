@@ -14,35 +14,51 @@ trees:
     url: "git@github.com:mockfs/mockfs.git"
     remotes:
       davvid: "git@github.com:davvid/mockfs.git"
-    variables:
-      DESTDIR: ""
-      prefix: "${TREE_PATH}/dist/${TREE_NAME}"
     commands:
       clean: |
         rm -fr build .coverage dist ${TREE_NAME}.egg-info
       doc: |
         python3 -m sphinx "$@" docs pages
       fmt: |
-        if test -f ./env3/bin/activate
+        if test -f ./${env_dir}/bin/activate
         then
-          source ./env3/bin/activate
+          source ./${env_dir}/bin/activate
         fi
         cercis --version
         git ls-files -- '*.py' | xargs cercis "$@"
       install: |
+        ${activate}
         if test -n "${DESTDIR}"
         then
             install_args="--root=${DESTDIR}"
         fi
         pip install --disable-pip-version-check --prefix="${prefix}" $install_args "$@" .
       dev: |
-        test -d env3 || python3 -m venv --system-site-packages env3
-        ./env3/bin/pip install --editable '.[build,dev,docs,testing]'
-      test: |
-        python3 -m pytest -p no:cacheprovider --doctest-modules "$@" mockfs tests
+        test -d ${env_dir} || python3 -m venv --system-site-packages ${env_dir}
+        ${activate}
+        pip install --editable '.[build,dev,docs,testing]'
+      test: ${activate} python3 -m pytest --doctest-modules "$@" mockfs tests
       tox: |
         tox run-parallel --parallel-live "$@"
-
+      wheel: |
+        ${activate}
+        python3 -m build -n .
   pages:
     description: mockfs documentation hosted on mockfs.github.io
     url: "git@github.com:mockfs/mockfs.github.io"
+
+variables:
+  DESTDIR: ""
+  prefix: "${TREE_PATH}/dist/${TREE_NAME}"
+  env_dir: env3
+  activate: |
+    if test -z "${is_virtualenv}" && test -f "${env_dir}/bin/activate"
+    then
+        source "${env_dir}/bin/activate"
+    fi
+  is_virtualenv: |
+    $ python3 -c '
+    import os, sys
+    if sys.prefix != sys.base_prefix or os.environ.get("VIRTUAL_ENV"):
+        print("true")
+    '
