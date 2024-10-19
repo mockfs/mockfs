@@ -2,10 +2,10 @@
 #
 # Usage:
 #   garden grow pages           # Clone mockfs.github.io to pages/.
+#   garden dev                  # Create an "env3" virtualenv for development.
 #   garden doc                  # Generate documentation to pages/.
 #   garden test                 # Run tests directly using "pytest".
 #   garden tox                  # Run tests using "tox".
-#   garden dev                  # Create an "env3" virtualenv for development.
 #   garden fmt                  # Format code using "cercis".
 trees:
   mockfs:
