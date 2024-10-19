@@ -1,3 +1,7 @@
+v2.0.2
+======
+    * `cercis <https://github.com/jsh9/cercis>`_ is now used for code styling.
+
 v2.0.1
 ======
     * ``setup.cfg`` was removed and replaced by ``pyproject.toml``.
