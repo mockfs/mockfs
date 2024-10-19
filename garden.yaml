@@ -38,6 +38,9 @@ trees:
         test -d ${env_dir} || python3 -m venv --system-site-packages ${env_dir}
         ${activate}
         pip install --editable '.[build,dev,docs,testing]'
+      publish: |
+        ${activate}
+        twine upload --sign dist/*.whl dist/*.tar.gz
       test: ${activate} python3 -m pytest --doctest-modules "$@" mockfs tests
       tox: |
         tox run-parallel --parallel-live "$@"
